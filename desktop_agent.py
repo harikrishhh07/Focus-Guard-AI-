@@ -386,8 +386,29 @@ def _mac_is_skip_app(name: str) -> bool:
 
 
 def _mac_frontmost_via_system_events():
-    """Reliable frontmost app on macOS via System Events (works for GUI apps)."""
-    script = '''
+    """Get frontmost app on macOS — uses path-to-frontmost (no Accessibility permission needed)."""
+    # PRIMARY: path to frontmost application — works WITHOUT Accessibility permission
+    script_primary = (
+        'set n to name of (info for (path to frontmost application))\n'
+        'if n ends with ".app" then set n to text 1 thru -5 of n\n'
+        'return n & "|||"'
+    )
+    try:
+        res = subprocess.run(
+            ['osascript', '-e', script_primary],
+            capture_output=True, text=True, timeout=3
+        )
+        if res.returncode == 0 and res.stdout.strip():
+            parts = res.stdout.strip().split('|||', 1)
+            app_name = (parts[0] or '').strip()
+            title = (parts[1] if len(parts) > 1 else '').strip() or app_name
+            if app_name and not _mac_is_skip_app(app_name):
+                return app_name, title or app_name
+    except Exception as e:
+        log.debug(f'macOS primary osascript error: {e}')
+
+    # SECONDARY: System Events (requires Accessibility permission — may fail)
+    script_se = '''
     tell application "System Events"
         set frontApp to first application process whose frontmost is true
         set appName to name of frontApp
@@ -400,52 +421,42 @@ def _mac_frontmost_via_system_events():
         return appName & "|||" & winTitle
     end tell
     '''
-    res = subprocess.run(
-        ['osascript', '-e', script],
-        capture_output=True, text=True, timeout=3
-    )
-    if res.returncode != 0 or not res.stdout.strip():
-        return None, None
-    parts = res.stdout.strip().split('|||', 1)
-    app_name = (parts[0] or '').strip()
-    title = (parts[1] if len(parts) > 1 else '').strip() or app_name
-    if _mac_is_skip_app(app_name):
-        return None, None
-    return app_name, title
+    try:
+        res2 = subprocess.run(
+            ['osascript', '-e', script_se],
+            capture_output=True, text=True, timeout=3
+        )
+        if res2.returncode == 0 and res2.stdout.strip():
+            parts = res2.stdout.strip().split('|||', 1)
+            app_name = (parts[0] or '').strip()
+            title = (parts[1] if len(parts) > 1 else '').strip() or app_name
+            if app_name and not _mac_is_skip_app(app_name):
+                return app_name, title
+    except Exception as e:
+        log.debug(f'macOS System Events error: {e}')
+
+    return None, None
 
 
 def _mac_frontmost_via_lsappinfo():
-    """Fallback using lsappinfo (may return widget extensions — filter them)."""
-    res = subprocess.run(
-        ['lsappinfo', 'info', '-only', 'name', 'front'],
-        capture_output=True, text=True, timeout=2
-    )
-    match = re.search(r'"([^"]+)"', res.stdout or '')
-    if not match:
-        # Sometimes lsappinfo prints bare name
-        bare = (res.stdout or '').strip()
-        app_name = bare if bare and ' ' not in bare[:40] else None
-        if not app_name:
-            return None, None
-    else:
-        app_name = match.group(1).strip()
-
-    if _mac_is_skip_app(app_name):
-        return None, None
-
-    title = app_name
+    """Fallback: lsappinfo ASN lookup (no Accessibility permission needed)."""
     try:
-        title_res = subprocess.run(
-            ['osascript', '-e',
-             f'tell application "System Events" to tell process "{app_name}" '
-             f'to if (count of windows) > 0 then get name of front window'],
-            capture_output=True, text=True, timeout=2
-        )
-        if title_res.returncode == 0 and title_res.stdout.strip():
-            title = title_res.stdout.strip()
-    except Exception:
-        pass
-    return app_name, title
+        front_res = subprocess.run(['lsappinfo', 'front'], capture_output=True, text=True, timeout=2)
+        asn_match = re.search(r'ASN:([\w\-]+)', front_res.stdout)
+        if asn_match:
+            asn = asn_match.group(1)
+            info_res = subprocess.run(
+                ['lsappinfo', 'info', '-only', 'name', asn],
+                capture_output=True, text=True, timeout=2
+            )
+            name_match = re.search(r'"([^"]+)"', info_res.stdout or '')
+            if name_match:
+                app_name = name_match.group(1).strip()
+                if app_name and not _mac_is_skip_app(app_name):
+                    return app_name, app_name
+    except Exception as e:
+        log.debug(f'lsappinfo error: {e}')
+    return None, None
 
 
 def get_active_window():

@@ -10,6 +10,18 @@ from apps.focus_sessions.models import FocusSession
 from apps.users.models import Goal
 from apps.ai_engine.models import AIInsight
 from apps.ai_engine.serializers import AIInsightSerializer
+import socket
+
+
+def _is_desktop_agent_running() -> bool:
+    """Returns True if the desktop agent mutex port (49556) is bound, meaning agent is active."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(0.3)
+            s.bind(('127.0.0.1', 49556))
+            return False  # bound successfully → port was free → agent NOT running
+    except OSError:
+        return True   # port already in use → agent IS running
 
 
 def format_duration(total_secs: float) -> str:
@@ -311,10 +323,11 @@ class DashboardSummaryView(generics.GenericAPIView):
             'active_app':         active_app,
             'active_focus_session': active_focus_data,
             'today_sessions':     today_sessions,
-            # Extension
             # Extension — only "connected" while heartbeat cache is fresh
             'extension_connected': bool(cache.get(f"ext_active_{user.id}")),
             'extension_recent': bool(cache.get(f"ext_active_{user.id}")),
+            # Desktop Agent — running if mutex port 49556 is bound
+            'desktop_agent_running': _is_desktop_agent_running(),
             # AI
             'ai_insight': insight_data,
             'goals':      goals,

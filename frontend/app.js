@@ -534,6 +534,65 @@ function updateExtensionStatusUI(connected, dashData) {
   if (!connected) clearStaleExtensionHeartbeat();
 }
 
+/* ═══════════════════════════════════════════════════════
+   DESKTOP AGENT STATUS UI
+   ═══════════════════════════════════════════════════════ */
+function updateDesktopAgentStatusUI(agentRunning, extensionConnected) {
+  const card = qs('#desktopAgentCard');
+  const valEl = qs('#agentVal');
+  const pill = qs('#agentStatusPill');
+  const metaEl = qs('#agentMeta');
+
+  // Agent is considered "active" only when running AND extension is connected
+  // (the backend pauses posting when extension is disconnected)
+  const fullyActive = agentRunning && extensionConnected;
+  const isRunning = agentRunning;
+
+  if (valEl) {
+    let txt = 'Stopped';
+    if (isRunning && extensionConnected) txt = 'Active';
+    else if (isRunning && !extensionConnected) txt = 'Paused';
+    valEl.textContent = txt;
+    valEl.style.color = fullyActive
+      ? 'var(--color-success)'
+      : isRunning
+        ? 'var(--color-warning, #f59e0b)'
+        : 'var(--color-danger)';
+  }
+
+  if (pill) {
+    if (fullyActive) {
+      pill.textContent = 'LIVE';
+      pill.className = 'ext-status-pill on';
+    } else if (isRunning) {
+      pill.textContent = 'PAUSED';
+      pill.className = 'ext-status-pill off';
+      pill.style.background = 'rgba(245,158,11,.15)';
+      pill.style.color = '#f59e0b';
+    } else {
+      pill.textContent = 'OFF';
+      pill.className = 'ext-status-pill off';
+      pill.style.background = '';
+      pill.style.color = '';
+    }
+  }
+
+  if (card) {
+    card.classList.toggle('ext-connected', fullyActive);
+    card.classList.toggle('ext-disconnected', !fullyActive);
+  }
+
+  if (metaEl) {
+    if (fullyActive) {
+      metaEl.textContent = 'Live · Tracking desktop apps';
+    } else if (isRunning && !extensionConnected) {
+      metaEl.textContent = 'Running · Paused until extension connects';
+    } else {
+      metaEl.textContent = 'Not running · Start with start.sh';
+    }
+  }
+}
+
 async function fetchDashboard() {
   try {
     const res = await apiFetch('/dashboard/summary/');
@@ -844,6 +903,9 @@ function renderDashboard(d) {
 
   // Extension status — prefer live content-script attribute over stale API cache
   updateExtensionStatusUI(resolveExtensionConnected(d.extension_connected), d);
+
+  // Desktop Agent status — agent running state from API (port mutex), extension state from live DOM
+  updateDesktopAgentStatusUI(!!d.desktop_agent_running, resolveExtensionConnected(d.extension_connected));
 
   // Charts are rendered in the dedicated Analytics tab.
   renderCategoryChart(d.category_breakdown || {});
@@ -1285,21 +1347,47 @@ function renderSystemData(d) {
             <div class="empty-desc">Switch between applications and events appear here in real-time.</div>
           </div>`;
       } else {
+        // Category → color/emoji mapping for switch timeline badges
+        const catStyle = (cat, label) => {
+          const c = (cat || '').toLowerCase();
+          const l = (label || '').toUpperCase();
+          if (l === 'PRODUCTIVE' || c.includes('work') || c.includes('dev') || c.includes('code'))
+            return { color: 'var(--color-success, #22c55e)', bg: 'rgba(34,197,94,.12)', icon: '💼' };
+          if (l === 'DISTRACTING' || c.includes('social') || c.includes('entertainment') || c.includes('game'))
+            return { color: 'var(--color-danger, #ef4444)', bg: 'rgba(239,68,68,.12)', icon: '🎮' };
+          if (c.includes('communication') || c.includes('message') || c.includes('email'))
+            return { color: '#a78bfa', bg: 'rgba(167,139,250,.12)', icon: '💬' };
+          if (c.includes('browser') || c.includes('web'))
+            return { color: '#60a5fa', bg: 'rgba(96,165,250,.12)', icon: '🌐' };
+          if (c.includes('system') || c.includes('util') || c.includes('finder'))
+            return { color: 'var(--text-300)', bg: 'rgba(128,128,128,.1)', icon: '⚙️' };
+          return { color: 'var(--text-200)', bg: 'rgba(128,128,128,.08)', icon: '🖥️' };
+        };
         timeline.innerHTML = switches.map((s, i) => {
           const t = s.switched_at ? new Date(s.switched_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '—';
           const isLast = i === switches.length - 1;
+          const fromSt = catStyle(s.from_category, null);
+          const toSt   = catStyle(s.to_category, null);
+          const fromCat = s.from_category ? htmlEsc(s.from_category) : '';
+          const toCat   = s.to_category   ? htmlEsc(s.to_category)   : '';
           return `
             <div class="timeline-item">
               <div class="timeline-dot-col">
-                <div class="timeline-dot"></div>
+                <div class="timeline-dot" style="background:${toSt.color};box-shadow:0 0 6px ${toSt.color}40;"></div>
                 ${!isLast ? '<div class="timeline-line"></div>' : ''}
               </div>
               <div class="timeline-content">
                 <div class="timeline-header">
-                  <div class="timeline-main">
-                    <span class="domain-chip" style="font-weight:600;">${htmlEsc(s.from_app || 'App')}</span>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--text-300)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    <span class="domain-chip" style="font-weight:600;">${htmlEsc(s.to_app || 'App')}</span>
+                  <div class="timeline-main" style="flex-wrap:wrap;gap:4px;">
+                    <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:${fromSt.bg};color:${fromSt.color};font-size:12px;font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                      ${fromSt.icon} ${htmlEsc(s.from_app || 'App')}
+                    </span>
+                    ${fromCat ? `<span style="font-size:10px;color:var(--text-300);padding:1px 5px;border-radius:4px;background:var(--bg-200);">${fromCat}</span>` : ''}
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--text-300)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:${toSt.bg};color:${toSt.color};font-size:12px;font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                      ${toSt.icon} ${htmlEsc(s.to_app || 'App')}
+                    </span>
+                    ${toCat ? `<span style="font-size:10px;color:var(--text-300);padding:1px 5px;border-radius:4px;background:var(--bg-200);">${toCat}</span>` : ''}
                   </div>
                   <span class="timeline-time">${t}</span>
                 </div>
@@ -4051,20 +4139,28 @@ function initApp() {
 
   window.addEventListener('focusguard-extension-ready', () => {
     updateExtensionStatusUI(true);
+    // Re-read agent running state from last known dashboard data on extension connect
+    const agentRunning = !!(state.lastDashboardData && state.lastDashboardData.desktop_agent_running);
+    updateDesktopAgentStatusUI(agentRunning, true);
   });
   window.addEventListener('focusguard-extension-disconnected', () => {
     updateExtensionStatusUI(false);
     clearStaleExtensionHeartbeat();
+    const agentRunning = !!(state.lastDashboardData && state.lastDashboardData.desktop_agent_running);
+    updateDesktopAgentStatusUI(agentRunning, false);
   });
 
   // Reflect connect/disconnect if page attribute flips
   const extAttrObserver = new MutationObserver(() => {
     const attr = document.documentElement.getAttribute('data-focusguard-extension');
+    const agentRunning = !!(state.lastDashboardData && state.lastDashboardData.desktop_agent_running);
     if (attr === 'disconnected') {
       updateExtensionStatusUI(false);
       clearStaleExtensionHeartbeat();
+      updateDesktopAgentStatusUI(agentRunning, false);
     } else if (attr === 'connected') {
       updateExtensionStatusUI(true);
+      updateDesktopAgentStatusUI(agentRunning, true);
     }
   });
   extAttrObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-focusguard-extension'] });
@@ -4072,6 +4168,11 @@ function initApp() {
   // Initial sync from current attribute (don't wait for next poll)
   updateExtensionStatusUI(resolveExtensionConnected(false));
   if (!resolveExtensionConnected(false)) clearStaleExtensionHeartbeat();
+  // Also set initial desktop agent state
+  updateDesktopAgentStatusUI(
+    !!(state.lastDashboardData && state.lastDashboardData.desktop_agent_running),
+    resolveExtensionConnected(false)
+  );
 
   if (typeof window.fgRefreshUIInteractions === 'function') {
     window.fgRefreshUIInteractions();
