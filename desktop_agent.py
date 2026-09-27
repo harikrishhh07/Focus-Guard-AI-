@@ -704,9 +704,11 @@ def run_agent():
                 if ext_connected != extension_connected_state:
                     extension_connected_state = ext_connected
                     if ext_connected:
-                        log.info('[EXT] Chrome extension Connected.')
+                        log.info('[EXT] Chrome extension Connected — starting desktop app & switch detection.')
                     else:
-                        log.info('[EXT] Chrome extension Standby.')
+                        log.info('[EXT] Chrome extension Disconnected — pausing desktop app detection until extension connects.')
+                        current_proc = None
+                        session_start = None
 
                 if is_session_active != session_active_state:
                     session_active_state = is_session_active
@@ -715,8 +717,8 @@ def run_agent():
                     else:
                         log.info('[FOCUS] Focus Session is IDLE.')
 
-            # Pause desktop detection during an active break
-            if on_break_state:
+            # Stop desktop detection when Chrome extension is disconnected
+            if extension_connected_state is False:
                 if current_proc or session_start:
                     current_proc = None
                     session_start = None

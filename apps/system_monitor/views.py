@@ -17,7 +17,15 @@ class SystemAppLogCreateView(generics.CreateAPIView):
     serializer_class = SystemAppLogSerializer
 
     def create(self, request, *args, **kwargs):
+        from django.core.cache import cache
         from apps.focus_sessions.views import get_active_break
+
+        # Detection runs when extension is connected; pauses when disconnected
+        if not cache.get(f"ext_active_{request.user.id}"):
+            return Response({
+                "status": "paused",
+                "detail": "Desktop tracking paused — Chrome extension is disconnected.",
+            }, status=status.HTTP_200_OK)
 
         if get_active_break(request.user):
             return Response({
@@ -90,7 +98,13 @@ class SystemSwitchCreateView(generics.CreateAPIView):
     serializer_class = SystemSwitchEventSerializer
 
     def create(self, request, *args, **kwargs):
+        from django.core.cache import cache
         from apps.focus_sessions.views import get_active_break
+        if not cache.get(f"ext_active_{request.user.id}"):
+            return Response({
+                "status": "paused",
+                "detail": "System switch tracking paused — Chrome extension is disconnected.",
+            }, status=status.HTTP_200_OK)
         if get_active_break(request.user):
             return Response({
                 "status": "paused",
