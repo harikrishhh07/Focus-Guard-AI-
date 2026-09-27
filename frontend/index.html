@@ -808,6 +808,21 @@
             <div class="stat-meta" id="extMeta" data-i18n="dash.extMeta">Browser tracker status</div>
           </div>
 
+          <!-- Desktop Agent Status Card -->
+          <div class="stat-card card-hover fitness-stat" id="desktopAgentCard" style="--stat-accent: #A6FF00;">
+            <div class="stat-header">
+              <div class="stat-label">Desktop Agent</div>
+              <div class="stat-icon fitness-icon" style="background: rgba(166,255,0,.15); color:#A6FF00;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="12" cy="10" r="2"/></svg>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:2px;">
+              <div class="stat-value" id="agentVal" style="font-size: 16px; padding-top: 0;">—</div>
+              <span id="agentStatusPill" class="ext-status-pill off">OFF</span>
+            </div>
+            <div class="stat-meta" id="agentMeta">App tracking status</div>
+          </div>
+
         </div>
 
         <!-- Browsing & Desktop Activity -->
@@ -2001,7 +2016,7 @@
 </div>
 
 <script src="/static/i18n.js?v=20260925_lang_v1"></script>
-<script src="/static/app.js?v=20260925_fitness_panes_v1"></script>
+<script src="/static/app.js?v=20260927_agent_status_v2"></script>
 <script src="/static/ui-interactions.js?v=20260925_fitness_panes_v1"></script>
 </body>
 </html>
