@@ -1,0 +1,4 @@
+Research from the University of California, Irvine reveals that it takes an average of 23 minutes and 15 seconds to return to the original focus state after an interruption.
+Frequent context switching between applications (e.g. from an IDE to messaging apps or social feeds) fragments attention and causes 'attention residue', where parts of the mind remain preoccupied with the previous task.
+Users who experience more than 15 context switches per hour report significantly higher perceived mental workload, frustration, time pressure, and cognitive exhaustion.
+Preserving attention requires batching communication and scheduling dedicated focus sessions with zero notification interruptions.

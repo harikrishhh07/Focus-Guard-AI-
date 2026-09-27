@@ -1,0 +1,18 @@
+{
+  "project": {
+    "id": "214984624550005510",
+    "title": "Focus Guard Fitness Theme"
+  },
+  "screen": {
+    "id": "324da3f7d9e3496d93e1dad9407b1e07",
+    "title": "Focus Guard AI - Fitness Redesign Dashboard",
+    "deviceType": "DESKTOP",
+    "width": 2560,
+    "height": 2526,
+    "files": {
+      "html": "focus-guard-ai-fitness-dashboard.html",
+      "screenshot": "focus-guard-ai-fitness-dashboard.png"
+    }
+  },
+  "source": "Google Stitch MCP"
+}

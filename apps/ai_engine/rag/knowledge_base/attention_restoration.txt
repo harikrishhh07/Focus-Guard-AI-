@@ -1,0 +1,4 @@
+Attention Restoration Theory (ART) posits that nature and restorative breaks can renew cognitive focus. 
+Voluntary directed attention requires active mental effort and is susceptible to mental fatigue over prolonged computer use.
+Involuntary attention, on the other hand, is effortless. Incorporating micro-breaks of 3-5 minutes every 45 minutes of continuous cognitive strain allows directed attention fatigue to recover significantly.
+When employees and developers ignore recovery periods, error rates in code compilation and document processing increase by up to 38% in the second half of the workday.

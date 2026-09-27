@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocusGuard AI — Attention Intelligence Platform</title>
+  <meta name="description" content="AI-powered digital attention monitoring, context switch tracking, and productivity analytics.">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script>
+    try {
+      if (localStorage.getItem('fg_token')) {
+        document.documentElement.classList.add('logged-in');
+      }
+    } catch(e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&family=Space+Grotesk:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,300..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary": "#67001a",
+            "outline-variant": "#5d3f40",
+            "on-surface-variant": "#e7bcbd",
+            "error": "#ffb4ab",
+            "surface-dim": "#131315",
+            "primary": "#ffb2b6",
+            "secondary-fixed-dim": "#b0d500",
+            "on-surface": "#e4e2e4",
+            "surface-container-lowest": "#0e0e10",
+            "on-secondary": "#2a3400",
+            "inverse-primary": "#be0038",
+            "outline": "#ae8789",
+            "on-primary-fixed-variant": "#920029",
+            "surface-container-highest": "#353437",
+            "surface-container": "#1f1f21",
+            "on-error": "#690005",
+            "on-tertiary-fixed-variant": "#004f54",
+            "primary-container": "#FA114F",
+            "primary-fixed-dim": "#ffb2b6",
+            "surface-bright": "#39393b",
+            "tertiary-fixed": "#7df4ff",
+            "on-error-container": "#ffdad6",
+            "surface-container-high": "#2a2a2c",
+            "on-primary-container": "#5b0016",
+            "secondary": "#ffffff",
+            "tertiary-container": "#00a0aa",
+            "on-secondary-fixed": "#171e00",
+            "on-tertiary-container": "#002f33",
+            "on-tertiary": "#00363a",
+            "secondary-container": "#A6FF00",
+            "tertiary": "#00F0FF",
+            "surface-container-low": "#1b1b1d",
+            "on-secondary-container": "#596c00",
+            "inverse-on-surface": "#303032",
+            "surface": "#131315",
+            "on-secondary-fixed-variant": "#3e4c00",
+            "on-background": "#e4e2e4",
+            "surface-variant": "#353437",
+            "error-container": "#93000a",
+            "primary-fixed": "#ffdadb",
+            "tertiary-fixed-dim": "#00F0FF",
+            "background": "#131315",
+            "secondary-fixed": "#A6FF00",
+            "on-primary-fixed": "#40000d",
+            "surface-tint": "#ffb2b6",
+            "on-tertiary-fixed": "#002022",
+            "inverse-surface": "#e4e2e4"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "margin": "1.5rem",
+            "gutter-expanded": "1.5rem",
+            "gutter-compact": "0.75rem",
+            "margin-desktop": "2rem",
+            "gutter": "1rem",
+            "space-xl": "2.5rem",
+            "margin-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-ui": ["Hanken Grotesk", "sans-serif"],
+            "body-md": ["Hanken Grotesk", "sans-serif"],
+            "headline-md": ["Space Grotesk", "sans-serif"],
+            "metric-digit-xl": ["Space Grotesk", "sans-serif"],
+            "headline-xl": ["Space Grotesk", "sans-serif"],
+            "headline-lg": ["Space Grotesk", "sans-serif"],
+            "metric-digit-md": ["Space Grotesk", "sans-serif"],
+            "headline-sm": ["Space Grotesk", "sans-serif"],
+            "body-sm": ["Hanken Grotesk", "sans-serif"],
+            "label-caps": ["Space Grotesk", "sans-serif"],
+            "body-lg": ["Hanken Grotesk", "sans-serif"],
+            "display-hero": ["Space Grotesk", "sans-serif"],
+            "display-hero-mobile": ["Space Grotesk", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/static/style.css?v=20260925_fitness_panes_v1">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://accounts.google.com/gsi/client" defer></script>
+</head>
+<body>
+
+<!-- ═══════ TOAST STACK ═══════ -->
+<div class="toast-stack" id="toastStack"></div>
+
+<!-- ═══════ LANDING PAGE & AUTH PORTAL (STITCH BIOMETRIC DESIGN) ═══════ -->
+<div id="landingPage" class="landing-container relative min-h-screen bg-[#09090b] text-on-surface antialiased flex flex-col justify-between overflow-x-hidden">
+
+  <!-- Interactive Dynamic Background Shader with Soft Obsidian Vignette -->
+  <div class="fixed inset-0 w-full h-full pointer-events-none -z-10" style="display:block;">
+    <canvas id="shader-canvas-ANIMATION_7" style="display:block;width:100%;height:100%"></canvas>
+    <script>
+    (function() {
+      const canvas = document.getElementById('shader-canvas-ANIMATION_7');
+      if (!canvas) return;
+
+      function syncSize() {
+        const w = canvas.clientWidth  || window.innerWidth || 1280;
+        const h = canvas.clientHeight || window.innerHeight || 720;
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width  = w;
+          canvas.height = h;
+        }
+      }
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(syncSize).observe(canvas);
+      }
+      syncSize();
+
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) return;
+      const vs = `attribute vec2 a_position;
+    varying vec2 v_texCoord;
+    void main() {
+      v_texCoord = a_position * 0.5 + 0.5;
+      gl_Position = vec4(a_position, 0.0, 1.0);
+    }`;
+      const fs = `precision highp float;
+    uniform float u_time;
+    uniform vec2 u_resolution;
+
+    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+    vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+    vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+    float snoise(vec2 v) {
+      const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+      vec2 i  = floor(v + dot(v, C.yy) );
+      vec2 x0 = v -   i + dot(i, C.xx);
+      vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+      vec4 x12 = x0.xyxy + C.xxzz;
+      x12.xy -= i1;
+      i = mod289(i);
+      vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+      vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+      m = m*m; m = m*m;
+      vec3 x = 2.0 * fract(p * C.www) - 1.0;
+      vec3 h = abs(x) - 0.5;
+      vec3 ox = floor(x + 0.5);
+      vec3 a0 = x - ox;
+      m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+      vec3 g;
+      g.x  = a0.x  * x0.x  + h.x  * x0.y;
+      g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+      return 130.0 * dot(m, g);
+    }
+
+    void main() {
+        vec2 st = gl_FragCoord.xy / u_resolution.xy;
+        st.x *= u_resolution.x / u_resolution.y;
+        float t = u_time * 0.22;
+        vec2 c1 = vec2(0.28 * (u_resolution.x / u_resolution.y), 0.52);
+        vec2 c2 = vec2(0.72 * (u_resolution.x / u_resolution.y), 0.48);
+
+        float n1 = snoise(st * 1.8 + vec2(t * 0.4, -t * 0.3));
+        float n2 = snoise(st * 3.2 - vec2(t * 0.2, t * 0.5) + n1 * 0.4);
+        
+        vec3 colCoral = vec3(0.98, 0.07, 0.31);
+        vec3 colLime  = vec3(0.63, 1.0, 0.0);
+        vec3 colCyan  = vec3(0.0, 0.94, 1.0);
+        vec3 colDark  = vec3(0.035, 0.035, 0.042);
+        vec3 colMid   = vec3(0.07, 0.07, 0.09);
+
+        float d1 = length(st - c1 + vec2(n1 * 0.12, n2 * 0.1));
+        float d2 = length(st - c2 - vec2(n2 * 0.15, n1 * 0.12));
+
+        float coralWave = smoothstep(0.7, 0.05, d1 + sin(t + n1 * 2.0) * 0.15);
+        float limeWave  = smoothstep(0.85, 0.1, length(st - vec2(0.2 * (u_resolution.x/u_resolution.y), 0.25)) + n2 * 0.2);
+        float cyanWave  = smoothstep(0.8, 0.1, d2 + cos(t * 1.3 + n2 * 2.5) * 0.18);
+
+        vec3 finalColor = colDark;
+        finalColor = mix(finalColor, colMid, smoothstep(1.5, 0.0, length(st - vec2(0.5 * (u_resolution.x/u_resolution.y), 0.5))));
+        
+        finalColor += colCoral * coralWave * 0.38;
+        finalColor += colLime * limeWave * 0.26;
+        finalColor += colCyan * cyanWave * 0.32;
+
+        float vignette = smoothstep(1.6, 0.4, length(st - vec2(0.5 * (u_resolution.x / u_resolution.y), 0.5)));
+        finalColor *= vignette;
+
+        gl_FragColor = vec4(finalColor, 1.0);
+    }`;
+      function cs(type, src) {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        return s;
+      }
+      const prog = gl.createProgram();
+      gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+      gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+      const pos = gl.getAttribLocation(prog, 'a_position');
+      gl.enableVertexAttribArray(pos);
+      gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+      const uTime = gl.getUniformLocation(prog, 'u_time');
+      const uRes = gl.getUniformLocation(prog, 'u_resolution');
+
+      function render(t) {
+        if (typeof ResizeObserver === 'undefined') syncSize();
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        if (uTime) gl.uniform1f(uTime, t * 0.001);
+        if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(render);
+      }
+      render(0);
+    })();
+    </script>
+  </div>
+
+  <div class="fixed inset-0 bg-background/55 backdrop-blur-[2px] pointer-events-none -z-10"></div>
+
+  <!-- Header Branding Shell -->
+  <header class="relative z-10 w-full px-space-lg lg:px-margin-desktop py-space-md border-b border-white/[0.04] bg-surface-container-lowest/80 backdrop-blur-xl flex items-center justify-between">
+    <div class="flex items-center gap-space-md">
+      <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-surface-container-high border border-white/[0.08] shadow-inner group transition-all duration-300 hover:border-primary-container/50">
+        <svg class="w-6 h-6 kinetic-coral transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 32 32">
+          <circle cx="16" cy="16" r="13" stroke="#FA114F" stroke-dasharray="60 30" stroke-linecap="round" stroke-width="2.5"></circle>
+          <circle cx="16" cy="16" r="8.5" stroke="#A6FF00" stroke-dasharray="40 20" stroke-linecap="round" stroke-width="2.5"></circle>
+          <circle cx="16" cy="16" r="4.5" stroke="#00F0FF" stroke-linecap="round" stroke-width="2"></circle>
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center gap-space-xs">
+          <span class="font-headline-sm text-headline-sm text-white tracking-tight font-bold">Focus Guard AI</span>
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-label-caps uppercase tracking-wider bg-surface-container-high border border-white/[0.08] text-tertiary">PRO 2.4</span>
+        </div>
+        <p class="font-body-sm text-body-sm text-on-surface-variant/70">Biometric Cognitive Engine Pro 2.4</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-space-md">
+      <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container/60 border border-white/[0.06] backdrop-blur-md shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse shadow-[0_0_8px_#A6FF00]"></span>
+        <span class="font-label-ui text-label-ui text-on-surface/80">Global Neural Grid Online</span>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="showAuthTab('login')">Sign In</button>
+      <button class="btn btn-primary btn-sm" onclick="showAuthTab('register')">Create Account</button>
+    </div>
+  </header>
+
+  <!-- Main Authenticated Split Workspace -->
+  <main class="relative z-10 flex-1 flex items-center justify-center p-space-md md:p-space-lg lg:p-space-xl max-w-7xl mx-auto w-full">
+    <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter-expanded items-center">
+      <!-- Left Visual Panel: Biometric Concentric Rings & Telemetry Teaser -->
+      <section class="hidden lg:flex lg:col-span-6 flex-col justify-between space-y-space-lg pr-space-lg">
+        <!-- Live State Floating Badge -->
+        <div class="inline-flex items-center gap-space-sm px-4 py-2 rounded-full bg-surface-container-high/80 border border-tertiary/30 backdrop-blur-xl shadow-[0_0_15px_rgba(0,219,233,0.2)] w-fit">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-tertiary shadow-[0_0_6px_#00F0FF]"></span>
+          </span>
+          <span class="font-label-ui text-label-ui text-tertiary font-semibold tracking-wide">Shield Core Active</span>
+          <span class="text-white/20 text-xs">|</span>
+          <span class="font-label-ui text-label-ui text-on-surface/80">Sync ready for Apple Watch & EEG Rings</span>
+        </div>
+
+        <!-- Athletic Hero Rings Presentation Card -->
+        <div class="relative bg-surface-container-lowest/85 border border-white/[0.08] rounded-3xl p-space-lg backdrop-blur-2xl shadow-2xl overflow-hidden group">
+          <div class="flex flex-col md:flex-row items-center gap-space-lg relative z-10">
+            <!-- Animated Concentric Activity Rings -->
+            <div class="relative w-56 h-56 flex-shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full" viewBox="0 0 200 200">
+                <g class="-rotate-90 origin-center">
+                  <circle cx="100" cy="100" fill="none" r="82" stroke="#FA114F" stroke-opacity="0.14" stroke-width="14"></circle>
+                  <circle cx="100" cy="100" fill="none" r="62" stroke="#A6FF00" stroke-opacity="0.14" stroke-width="14"></circle>
+                  <circle cx="100" cy="100" fill="none" r="42" stroke="#00F0FF" stroke-opacity="0.14" stroke-width="14"></circle>
+                </g>
+                <g class="animate-spin-cw">
+                  <circle class="kinetic-coral" cx="100" cy="100" fill="none" r="82" stroke="#FA114F" stroke-dasharray="515.2" stroke-dashoffset="92" stroke-linecap="round" stroke-width="14"></circle>
+                </g>
+                <g class="animate-spin-ccw">
+                  <circle class="kinetic-lime" cx="100" cy="100" fill="none" r="62" stroke="#A6FF00" stroke-dasharray="389.5" stroke-dashoffset="108" stroke-linecap="round" stroke-width="14"></circle>
+                </g>
+                <g class="animate-spin-cyan">
+                  <circle class="kinetic-cyan" cx="100" cy="100" fill="none" r="42" stroke="#00F0FF" stroke-dasharray="263.8" stroke-dashoffset="35" stroke-linecap="round" stroke-width="14"></circle>
+                </g>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center kinetic-float pointer-events-none">
+                <span class="material-symbols-outlined text-primary-container text-2xl animate-pulse">radar</span>
+                <span class="font-headline-md text-headline-md font-bold text-white tracking-tight mt-0.5">88%</span>
+                <span class="font-label-caps text-label-caps text-on-surface-variant/90 tracking-widest text-[9px] font-semibold">FLOW READY</span>
+              </div>
+            </div>
+            <!-- Concentric Ring Breakdown Legends -->
+            <div class="space-y-space-sm w-full">
+              <div class="p-space-sm rounded-xl bg-surface-container/60 border border-white/[0.05] flex items-center justify-between">
+                <div class="flex items-center gap-space-sm">
+                  <span class="w-3 h-3 rounded-full bg-primary-container shadow-[0_0_8px_#FA114F]"></span>
+                  <div>
+                    <p class="font-label-caps text-label-caps text-on-surface-variant">DEEP WORK TARGET</p>
+                    <p class="font-headline-sm text-headline-sm text-white font-semibold">180 / 210 min</p>
+                  </div>
+                </div>
+                <span class="font-label-caps text-label-caps text-primary-container bg-primary-container/10 border border-primary-container/25 px-2 py-1 rounded font-bold">86%</span>
+              </div>
+              <div class="p-space-sm rounded-xl bg-surface-container/60 border border-white/[0.05] flex items-center justify-between">
+                <div class="flex items-center gap-space-sm">
+                  <span class="w-3 h-3 rounded-full bg-secondary-container shadow-[0_0_8px_#A6FF00]"></span>
+                  <div>
+                    <p class="font-label-caps text-label-caps text-on-surface-variant">VELOCITY MOMENTUM</p>
+                    <p class="font-headline-sm text-headline-sm text-white font-semibold">12 / 16 tasks</p>
+                  </div>
+                </div>
+                <span class="font-label-caps text-label-caps text-secondary-container bg-secondary-container/10 border border-secondary-container/25 px-2 py-1 rounded font-bold">75%</span>
+              </div>
+              <div class="p-space-sm rounded-xl bg-surface-container/60 border border-white/[0.05] flex items-center justify-between">
+                <div class="flex items-center gap-space-sm">
+                  <span class="w-3 h-3 rounded-full bg-tertiary shadow-[0_0_8px_#00F0FF]"></span>
+                  <div>
+                    <p class="font-label-caps text-label-caps text-on-surface-variant">NEURAL RECHARGE</p>
+                    <p class="font-headline-sm text-headline-sm text-white font-semibold">48 / 50 min</p>
+                  </div>
+                </div>
+                <span class="font-label-caps text-label-caps text-tertiary bg-tertiary/10 border border-tertiary/25 px-2 py-1 rounded font-bold">96%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Athletic Streak Teaser Card -->
+        <div class="p-space-md rounded-2xl bg-surface-container-high/40 border border-white/[0.06] backdrop-blur-xl flex items-center justify-between">
+          <div class="flex items-center gap-space-md">
+            <div class="w-12 h-12 rounded-xl bg-primary-container/10 border border-primary-container/30 flex items-center justify-center text-primary-container shadow-[0_0_15px_rgba(255,81,105,0.25)]">
+              <span class="material-symbols-outlined text-2xl animate-pulse">shield</span>
+            </div>
+            <div>
+              <h4 class="font-headline-sm text-headline-sm text-white font-bold">94 min uninterrupted streak awaiting</h4>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Hardware telemetry will automatically lock distraction vectors.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Form Panel: Glassmorphic Authentication Card -->
+      <section class="lg:col-span-6 flex justify-center">
+        <div class="card-border-glow w-full max-w-md shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]" id="auth">
+          <div class="w-full bg-[#131316]/95 border border-white/[0.07] rounded-[23px] p-6 sm:p-8 backdrop-blur-3xl relative overflow-hidden">
+            
+            <!-- Auth Tabs Switcher -->
+            <div class="auth-tabs flex gap-2 mb-6 p-1 bg-surface-container-lowest rounded-xl border border-white/10">
+              <button class="auth-tab active flex-1 py-2 px-3 text-center rounded-lg font-label-ui text-sm font-semibold transition-all" id="tabBtnLogin" onclick="showAuthTab('login')">
+                Sign In
+              </button>
+              <button class="auth-tab flex-1 py-2 px-3 text-center rounded-lg font-label-ui text-sm font-semibold transition-all text-on-surface-variant" id="tabBtnRegister" onclick="showAuthTab('register')">
+                Create Account
+              </button>
+            </div>
+
+            <!-- SIGN IN FORM -->
+            <div id="authLoginForm" class="auth-form-body space-y-4">
+              <div class="auth-header mb-2">
+                <h2 class="auth-title font-headline-xl text-xl font-bold text-white">Welcome Back</h2>
+                <p class="auth-subtitle text-xs text-on-surface-variant">Sign in to your FocusGuard AI workspace</p>
+              </div>
+
+              <!-- Google Login Integration -->
+              <div class="flex justify-center w-full my-2">
+                <div id="g_id_onload"
+                     data-client_id="{{ GOOGLE_CLIENT_ID }}"
+                     data-callback="handleGoogleCallback"
+                     data-ux_mode="popup"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="pill"
+                     data-theme="filled_black"
+                     data-text="signin_with"
+                     data-size="large"
+                     data-logo_alignment="left"
+                     data-width="320">
+                </div>
+              </div>
+
+              <div class="relative flex items-center justify-center my-3">
+                <div class="w-full border-t border-white/[0.08]"></div>
+                <span class="absolute px-3 bg-[#131316] font-label-caps text-[10px] text-on-surface-variant/70 tracking-wider">OR SIGN IN WITH USERNAME</span>
+              </div>
+
+              <div class="form-field space-y-1">
+                <label for="loginUsername" class="font-label-ui text-xs text-on-surface">Username</label>
+                <input type="text" id="loginUsername" class="form-input w-full h-11 px-3 bg-surface-container-lowest/80 border border-white/[0.1] rounded-xl font-body-md text-sm text-white outline-none" placeholder="Enter username" autocomplete="username">
+              </div>
+
+              <div class="form-field space-y-1">
+                <label for="loginPassword" class="font-label-ui text-xs text-on-surface">Password</label>
+                <div class="password-field-wrap relative">
+                  <input type="password" id="loginPassword" class="form-input w-full h-11 px-3 pr-10 bg-surface-container-lowest/80 border border-white/[0.1] rounded-xl font-body-md text-sm text-white outline-none" placeholder="••••••••" autocomplete="current-password">
+                  <button type="button" class="password-toggle-btn absolute right-3 top-3 text-on-surface-variant" data-target="loginPassword">
+                    <span class="material-symbols-outlined text-sm">visibility</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="auth-error-msg text-xs text-primary-container font-semibold" id="authError"></div>
+
+              <button id="loginBtn" class="w-full h-12 rounded-xl bg-primary-container text-white font-headline-sm font-bold flex items-center justify-center gap-2 neon-glow-coral transition-all active:scale-[0.98]">
+                <span>Sign In to FocusGuard</span>
+                <span class="material-symbols-outlined text-sm">bolt</span>
+              </button>
+
+              <div class="auth-footer-hint text-center text-xs text-on-surface-variant pt-2">
+                Don't have an account? <a href="javascript:void(0)" class="text-primary underline font-semibold" onclick="showAuthTab('register')">Create one free</a>
+              </div>
+            </div>
+
+            <!-- CREATE ACCOUNT FORM -->
+            <div id="authRegisterForm" class="auth-form-body space-y-3" style="display:none;">
+              <div class="auth-header mb-1">
+                <h2 class="auth-title font-headline-xl text-xl font-bold text-white">Create Free Account</h2>
+                <p class="auth-subtitle text-xs text-on-surface-variant">Start tracking your deep work and attention continuity</p>
+              </div>
+
+              <div class="form-field space-y-1">
+                <label for="regUsername" class="font-label-ui text-xs text-on-surface">Username *</label>
+                <input type="text" id="regUsername" class="form-input w-full h-10 px-3 bg-surface-container-lowest/80 border border-white/[0.1] rounded-xl font-body-md text-sm text-white outline-none" placeholder="Choose a username">
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <div class="form-field space-y-1">
+                  <label for="regFirstName" class="font-label-ui text-xs text-on-surface">First Name</label>
+                  <input type="text" id="regFirstName" class="form-input w-full h-10 px-3 bg-surface-container-lowest/80 border border-white/[0.1] rounded-xl font-body-md text-sm text-white outline-none" placeholder="John">
+                </div>
+                <div class="form-field space-y-1">
+                  <label for="regLastName" class="font-label-ui text-xs text-on-surface">Last Name</label>
+                  <input type="text" id="regLastName" class="form-input w-full h-10 px-3 bg-surface-container-lowest/80 border border-white/[0.1] rounded-xl font-body-md text-sm text-white outline-none" placeholder="Doe">
+                </div>
+              </div>
+
+              <div class="form-field space-y-1">
+                <label for="regEmail" class="font-label-ui text-xs text-on-surface">Email Address</label>
+                <input type="email" id="regEmail" class="form-input w-full h-10 px-3 bg-surface-container-lowest/80 border border-white/[0.1] rounded-xl font-body-md text-sm text-white outline-none" placeholder="you@company.com">
+              </div>
+
+              <div class="form-field space-y-1">
+                <label for="regPassword" class="font-label-ui text-xs text-on-surface">Password *</label>
+                <input type="password" id="regPassword" class="form-input w-full h-10 px-3 bg-surface-container-lowest/80 border border-white/[0.1] rounded-xl font-body-md text-sm text-white outline-none" placeholder="Min 6 characters">
+              </div>
+
+              <div class="form-field space-y-1">
+                <label for="regPasswordConfirm" class="font-label-ui text-xs text-on-surface">Confirm Password *</label>
+                <input type="password" id="regPasswordConfirm" class="form-input w-full h-10 px-3 bg-surface-container-lowest/80 border border-white/[0.1] rounded-xl font-body-md text-sm text-white outline-none" placeholder="Re-enter password">
+              </div>
+
+              <div class="auth-error-msg text-xs text-primary-container font-semibold" id="regError"></div>
+              <div class="auth-success-msg text-xs text-tertiary font-semibold" id="regSuccess"></div>
+
+              <button id="registerBtn" class="w-full h-11 rounded-xl bg-tertiary-container text-white font-headline-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                <span>Create Free Account</span>
+              </button>
+
+              <div class="auth-footer-hint text-center text-xs text-on-surface-variant pt-1">
+                Already have an account? <a href="javascript:void(0)" class="text-tertiary underline font-semibold" onclick="showAuthTab('login')">Sign In instead</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════ APP SHELL ═══════ -->
+<div class="shell" id="appShell" style="display:none;">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">FocusGuard AI</div>
+        <div class="brand-tagline" data-i18n="brand.tagline">Attention Intelligence</div>
+      </div>
+      <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close navigation">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <nav class="nav-section">
+      <p class="nav-label" data-i18n="nav.section.analytics">Analytics</p>
+
+      <button class="nav-item active" data-tab="dashboard">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </span>
+        <span data-i18n="nav.dashboard">Dashboard</span>
+      </button>
+
+      <button class="nav-item" data-tab="switches">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        </span>
+        <span data-i18n="nav.switches">Context Switches</span>
+        <span class="nav-badge" id="switchBadge"></span>
+      </button>
+
+      <button class="nav-item" data-tab="telemetry">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </span>
+        <span data-i18n="nav.telemetry">Activity & Apps</span>
+      </button>
+
+      <button class="nav-item" data-tab="analytics">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 16 4-5 3 3 5-7"/></svg>
+        </span>
+        <span data-i18n="nav.analytics">Analytics</span>
+      </button>
+
+      <p class="nav-label" data-i18n="nav.section.tools">Tools</p>
+
+      <button class="nav-item" data-tab="focus">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </span>
+        <span data-i18n="nav.focus">Focus Session</span>
+      </button>
+
+      <button class="nav-item" data-tab="blocker">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6-8 10-8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <span data-i18n="nav.blocker">Focus Shield</span>
+      </button>
+
+      <button class="nav-item" data-tab="break">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z"/><path d="M6 2h12"/></svg>
+        </span>
+        <span data-i18n="nav.break">Break</span>
+      </button>
+
+      <button class="nav-item" data-tab="goals">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </span>
+        <span data-i18n="nav.goals">Goals</span>
+      </button>
+
+      <button class="nav-item" data-tab="achievements">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        </span>
+        <span data-i18n="nav.achievements">Badges & Streaks</span>
+        <span class="nav-badge" id="navBadgesCountBadge" style="background:var(--brand-100); color:var(--brand-700); font-weight:700;">0/10</span>
+      </button>
+
+      <button class="nav-item" data-tab="reports">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </span>
+        <span data-i18n="nav.reports">Reports</span>
+      </button>
+
+      <button class="nav-item" data-tab="profile">
+        <span class="nav-icon-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
+        <span data-i18n="nav.profile">Profile</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-signal-card" aria-label="Focus Guard system status">
+      <div class="signal-card-heading">
+        <span class="signal-status"><span class="signal-dot"></span><span data-i18n="signal.active">Focus Guard active</span></span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-9 9"/><path d="M12 7a5 5 0 0 0-5 5"/><path d="M12 11a1 1 0 1 0 1 1"/><path d="M12 3a9 9 0 0 1 9 9"/><path d="M12 7a5 5 0 0 1 5 5"/></svg>
+      </div>
+      <div class="signal-card-metrics">
+        <div><strong data-i18n="topbar.live">LIVE</strong><span data-i18n="signal.feed">Attention feed</span></div>
+        <div><strong>5s</strong><span data-i18n="signal.sync">Sync interval</span></div>
+      </div>
+      <div class="signal-meter"><span></span></div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div class="user-details">
+          <div class="user-name" id="sidebarUsername" data-i18n="user.notSignedIn">Not signed in</div>
+          <div class="user-status">
+            <span class="status-dot"></span>
+            <span data-i18n="user.active">Active</span>
+          </div>
+        </div>
+        <button class="logout-btn" id="logoutBtn" title="Sign out">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- ─── MAIN ─── -->
+  <div class="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <button class="menu-toggle-btn" id="menuToggleBtn" aria-label="Toggle navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div class="topbar-left">
+        <h1 class="page-title" id="pageTitle" data-i18n="nav.dashboard">Dashboard</h1>
+        <div class="page-subtitle" id="pageSubtitle">
+          <span class="live-chip"><span class="live-pulse"></span><span data-i18n="topbar.live">LIVE</span></span>
+          <span data-i18n="topbar.updated">Updated</span> <span id="lastUpdated">—</span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <!-- Language Selector -->
+        <div class="lang-selector-widget" id="langSelectorWidget">
+          <span class="material-symbols-outlined lang-selector-icon">translate</span>
+          <select class="fg-lang-select lang-select-dropdown" id="topbarLangSelect" aria-label="Select Language"></select>
+        </div>
+
+        <!-- Streak Flame Widget -->
+        <div class="streak-pill-widget" id="topbarStreakWidget" title="Click to view Focus Streaks & Badges" style="display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(239, 68, 68, 0.12) 100%); border:1px solid rgba(249, 115, 22, 0.35); padding:6px 12px; border-radius:var(--r-full); cursor:pointer; font-size:12px; font-weight:700; color:#ea580c; transition:all 0.2s ease;">
+          <span style="font-size:14px;">🔥</span>
+          <span id="topbarStreakCount">0</span>
+          <span style="font-size:11px; font-weight:600; color:var(--text-600);" data-i18n="topbar.days">Days</span>
+        </div>
+
+        <button class="btn btn-secondary icon-only" id="soundToggleBtn" title="Audio Chimes: Active (Click to mute)" aria-label="Toggle Audio Chimes" style="width:36px; height:36px; padding:0; display:inline-flex; align-items:center; justify-content:center;">
+          <svg id="soundIconOn" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="soundIconOff" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button class="btn btn-secondary" id="aiAnalysisBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span data-i18n="topbar.aiAnalysis">AI Analysis</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- SCROLLABLE CONTENT -->
+    <div class="content" id="pageContent">
+
+      <!-- ═══════ TAB: DASHBOARD ═══════ -->
+      <div id="tab-dashboard" class="tab-pane active fitness-pane">
+
+        <!-- CONCENTRIC ACTIVITY RINGS HERO WIDGET -->
+        <div class="card mb-5 fitness-dash-rings relative overflow-hidden">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:24px;">
+            <!-- Left: Rings Visualizer -->
+            <div style="display:flex; align-items:center; gap:28px;">
+              <div style="position:relative; width:160px; height:160px; flex-shrink:0;">
+                <svg width="160" height="160" viewBox="0 0 160 160" style="transform: rotate(-90deg);">
+                  <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(250, 17, 79, 0.15)" stroke-width="12"></circle>
+                  <circle id="ringDeepFocus" cx="80" cy="80" r="70" fill="none" stroke="#FA114F" stroke-width="12" stroke-linecap="round" stroke-dasharray="440" stroke-dashoffset="88" style="transition: stroke-dashoffset 1s ease; filter: drop-shadow(0 0 6px rgba(250, 17, 79, 0.6));"></circle>
+                  <circle cx="80" cy="80" r="52" fill="none" stroke="rgba(166, 255, 0, 0.15)" stroke-width="12"></circle>
+                  <circle id="ringVelocity" cx="80" cy="80" r="52" fill="none" stroke="#A6FF00" stroke-width="12" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="45" style="transition: stroke-dashoffset 1s ease; filter: drop-shadow(0 0 6px rgba(166, 255, 0, 0.6));"></circle>
+                  <circle cx="80" cy="80" r="34" fill="none" stroke="rgba(0, 240, 255, 0.15)" stroke-width="12"></circle>
+                  <circle id="ringRecovery" cx="80" cy="80" r="34" fill="none" stroke="#00F0FF" stroke-width="12" stroke-linecap="round" stroke-dasharray="213" stroke-dashoffset="36" style="transition: stroke-dashoffset 1s ease; filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.6));"></circle>
+                </svg>
+                <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                  <span id="ringCenterPct" style="font-family:'Space Grotesk', sans-serif; font-size:22px; font-weight:700; color:#FFFFFF;">88%</span>
+                  <span style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#AEAEB2;" data-i18n="dash.flow">FLOW</span>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="width:10px; height:10px; border-radius:9999px; background:#FA114F; box-shadow:0 0 8px #FA114F;"></div>
+                  <div>
+                    <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#FA114F;" data-i18n="dash.deepFocus">DEEP FOCUS TARGET</div>
+                    <div id="ringDeepFocusLabel" style="font-family:'Space Grotesk', sans-serif; font-size:14px; font-weight:600; color:#FFFFFF;">4h 12m / 5h 30m</div>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="width:10px; height:10px; border-radius:9999px; background:#A6FF00; box-shadow:0 0 8px #A6FF00;"></div>
+                  <div>
+                    <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#A6FF00;" data-i18n="dash.velocity">TASK VELOCITY & SPRINT MOMENTUM</div>
+                    <div id="ringVelocityLabel" style="font-family:'Space Grotesk', sans-serif; font-size:14px; font-weight:600; color:#FFFFFF;">86 / 95 Score</div>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="width:10px; height:10px; border-radius:9999px; background:#00F0FF; box-shadow:0 0 8px #00F0FF;"></div>
+                  <div>
+                    <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#00F0FF;" data-i18n="dash.recovery">NEURAL RECOVERY & MINDFUL BREATH</div>
+                    <div id="ringRecoveryLabel" style="font-family:'Space Grotesk', sans-serif; font-size:14px; font-weight:600; color:#FFFFFF;">5 / 6 Stand Resets</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
+              <div style="display:flex; align-items:center; gap:8px; padding:6px 14px; border-radius:9999px; background:rgba(0,240,255,0.1); border:1px solid rgba(0,240,255,0.3); color:#00F0FF; font-size:12px; font-weight:600;">
+                <span style="width:6px; height:6px; border-radius:9999px; background:#00F0FF;" class="animate-pulse"></span>
+                <span data-i18n="dash.biometrics">BIOMETRICS SYNCED</span>
+              </div>
+              <div style="font-size:12px; color:#8E8E93; text-align:right;">
+                <span data-i18n="dash.peak">Optimal cognitive peak detected:</span> <strong style="color:#FFFFFF;">9:30 AM – 11:45 AM</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="stats-grid">
+
+          <div class="stat-card card-hover fitness-stat accent-lime" style="--stat-accent: #A6FF00;">
+            <div class="stat-header">
+              <div class="stat-label" data-i18n="dash.prodTime">Productive Time</div>
+              <div class="stat-icon fitness-icon lime">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="prodVal">—</div>
+            <div class="stat-meta" id="prodMeta" data-i18n="dash.readyTrack">Ready to track</div>
+          </div>
+
+          <div class="stat-card card-hover fitness-stat accent-coral" style="--stat-accent: #FA114F;">
+            <div class="stat-header">
+              <div class="stat-label" data-i18n="dash.distTime">Distracted Time</div>
+              <div class="stat-icon fitness-icon coral">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="distVal">—</div>
+            <div class="stat-meta" id="distMeta" data-i18n="dash.distMeta">Total distraction time</div>
+          </div>
+
+          <div class="stat-card card-hover fitness-stat accent-cyan" style="--stat-accent: #00F0FF;">
+            <div class="stat-header">
+              <div class="stat-label" data-i18n="dash.switches">Context Switches</div>
+              <div class="stat-icon fitness-icon cyan">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="switchVal">—</div>
+            <div class="stat-meta" id="switchMeta" data-i18n="dash.switchMeta">App & tab changes today</div>
+          </div>
+
+          <div class="stat-card card-hover fitness-stat accent-coral" style="--stat-accent: #FA114F;">
+            <div class="stat-header">
+              <div class="stat-label" data-i18n="dash.score">Productivity Score</div>
+              <div class="stat-icon fitness-icon coral">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="scoreVal">—</div>
+            <div class="stat-meta" id="scoreMeta" data-i18n="dash.scoreMeta">Focus & productivity rating</div>
+          </div>
+
+          <div class="stat-card card-hover fitness-stat accent-cyan" id="extStatusCard" style="--stat-accent: #00F0FF;">
+            <div class="stat-header">
+              <div class="stat-label" data-i18n="dash.extension">Extension</div>
+              <div class="stat-icon fitness-icon cyan">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:2px;">
+              <div class="stat-value" id="extVal" style="font-size: 16px; padding-top: 0;">—</div>
+              <span id="extStatusPill" class="ext-status-pill off" data-i18n="common.off">OFF</span>
+            </div>
+            <div class="stat-meta" id="extMeta" data-i18n="dash.extMeta">Browser tracker status</div>
+          </div>
+
+        </div>
+
+        <!-- Browsing & Desktop Activity -->
+        <div class="charts-row mb-5" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px;">
+          <div class="card">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div class="card-title" data-i18n="dash.topSites">Top Websites</div>
+                <div class="card-desc" data-i18n="dash.topSitesDesc">Browsing activity today</div>
+              </div>
+              <span class="badge badge-neutral" id="siteCount" style="display:none;"></span>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="th.type">Type / Source</th>
+                    <th data-i18n="th.title">Title / Application</th>
+                    <th data-i18n="th.domain">Domain / Process</th>
+                    <th data-i18n="th.category">Category</th>
+                    <th data-i18n="th.status">Status</th>
+                    <th data-i18n="th.time">Time Spent</th>
+                  </tr>
+                </thead>
+                <tbody id="topSitesBody">
+                  <tr><td colspan="6"><div class="empty"><div class="empty-icon">🌐</div><div class="empty-title">No browsing activity yet</div><div class="empty-desc">Connect the Chrome extension to start tracking websites.</div></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div class="card-title" data-i18n="dash.topApps">Top Desktop Apps</div>
+                <div class="card-desc" data-i18n="dash.topAppsDesc">Applications used today</div>
+              </div>
+              <span class="badge badge-neutral" id="appCount" style="display:none;"></span>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="th.application">Application</th>
+                    <th data-i18n="th.category">Category</th>
+                    <th data-i18n="th.status">Status</th>
+                    <th data-i18n="th.time">Time Spent</th>
+                  </tr>
+                </thead>
+                <tbody id="dashTopAppsBody">
+                  <tr><td colspan="4"><div class="empty"><div class="empty-icon">🖥️</div><div class="empty-title">No desktop apps yet</div><div class="empty-desc">The desktop agent will show active apps here.</div></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /tab-dashboard -->
+
+      <!-- ═══════ TAB: ANALYTICS ═══════ -->
+      <div id="tab-analytics" class="tab-pane">
+        <section class="analytics-hero" id="analyticsHero">
+          <div class="analytics-hero-glow"></div>
+          <div class="analytics-hero-inner">
+            <div>
+              <div class="analytics-kicker">Activity</div>
+              <h2 class="analytics-hero-title">Your focus rings, charted</h2>
+              <p class="analytics-hero-desc">Category mix, productivity split, and multi-day trends — styled like Apple Fitness activity views.</p>
+            </div>
+            <div class="analytics-range-toggle" role="group" aria-label="Trend range">
+              <button type="button" class="analytics-range-btn active" id="btnTrends7">7 Days</button>
+              <button type="button" class="analytics-range-btn" id="btnTrends30">30 Days</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="analytics-metrics" id="analyticsMetrics">
+          <div class="analytics-metric-card" data-metric="avg">
+            <div class="analytics-metric-label">Average Productivity</div>
+            <div class="analytics-metric-value-row">
+              <span class="analytics-metric-value" id="trendsAvgScore">—</span>
+              <span id="trendsDeltaBadge" class="badge badge-neutral">—</span>
+            </div>
+          </div>
+          <div class="analytics-metric-card" data-metric="prod">
+            <div class="analytics-metric-label">Productive Time</div>
+            <div class="analytics-metric-value success" id="trendsTotalProd">—</div>
+          </div>
+          <div class="analytics-metric-card" data-metric="dist">
+            <div class="analytics-metric-label">Distracted Time</div>
+            <div class="analytics-metric-value danger" id="trendsTotalDist">—</div>
+          </div>
+          <div class="analytics-metric-card" data-metric="switches">
+            <div class="analytics-metric-label">Context Switches</div>
+            <div class="analytics-metric-value brand" id="trendsTotalSwitches">—</div>
+          </div>
+        </div>
+
+        <div class="analytics-charts-grid" id="analyticsChartsGrid">
+          <div class="card analytics-chart-card analytics-chart-wide">
+            <div class="card-header analytics-chart-head">
+              <div>
+                <div class="card-title">Activity by Category</div>
+                <div class="card-desc">Minutes spent per category today</div>
+              </div>
+              <span class="analytics-live-dot" title="Live">Live</span>
+            </div>
+            <div class="card-body analytics-chart-body">
+              <div id="analyticsCategoryChartEmpty" class="analytics-empty">
+                <div class="analytics-empty-icon">📊</div>
+                <div class="analytics-empty-title">No category activity yet</div>
+                <div class="analytics-empty-desc">Start a focus session — bars appear here in real time.</div>
+              </div>
+              <div class="analytics-canvas-wrap" id="analyticsCategoryChartWrap">
+                <canvas id="analyticsCategoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card analytics-chart-card">
+            <div class="card-header analytics-chart-head">
+              <div>
+                <div class="card-title">Productivity Split</div>
+                <div class="card-desc">Today’s attention balance</div>
+              </div>
+            </div>
+            <div class="card-body analytics-chart-body analytics-donut-body">
+              <div class="analytics-donut-wrap">
+                <canvas id="analyticsDonutChart"></canvas>
+                <div class="analytics-donut-center" id="analyticsDonutCenter">
+                  <span class="analytics-donut-pct" id="analyticsDonutPct">—</span>
+                  <span class="analytics-donut-label">Focused</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="analyticsTrends" class="card analytics-chart-card analytics-trends-card mb-5">
+          <div class="card-header analytics-chart-head">
+            <div>
+              <div class="card-title">Focus &amp; Productivity Trends</div>
+              <div class="card-desc">Score line with productive vs distracted hours</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="analytics-trends-canvas-wrap">
+              <canvas id="trendsChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div><!-- /tab-analytics -->
+
+      <!-- ═══════ TAB: CONTEXT SWITCHES ═══════ -->
+      <div id="tab-switches" class="tab-pane fitness-pane">
+
+        <section class="fitness-section-hero mb-5">
+          <div class="fitness-section-kicker">Activity</div>
+          <h2 class="fitness-section-title">Context Switches</h2>
+          <p class="fitness-section-desc">Track how often attention jumps between apps and tabs — fewer switches mean deeper focus.</p>
+        </section>
+
+        <!-- Switch Stats -->
+        <div class="stats-grid mb-5" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="stat-card card-hover fitness-stat accent-coral" style="--stat-accent: #FA114F;">
+            <div class="stat-header">
+              <div class="stat-label">Total Switches</div>
+              <div class="stat-icon fitness-icon coral">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="swTotalVal">—</div>
+            <div class="stat-meta">App & tab changes today</div>
+          </div>
+
+          <div class="stat-card card-hover fitness-stat accent-lime" style="--stat-accent: #A6FF00;">
+            <div class="stat-header">
+              <div class="stat-label">Distraction Level</div>
+              <div class="stat-icon fitness-icon lime">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="swFragVal" style="font-size: 22px; padding-top: 5px;">—</div>
+            <div class="stat-meta">
+              <div class="frag-bar w-full" style="margin-top: 4px;">
+                <div class="frag-fill" id="swFragBar" style="width:0%; background: #A6FF00;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card card-hover fitness-stat accent-cyan" style="--stat-accent: #00F0FF;">
+            <div class="stat-header">
+              <div class="stat-label">Most Switched Path</div>
+              <div class="stat-icon fitness-icon cyan">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="swTopVal" style="font-size: 13px; padding-top: 4px; font-weight: 600; color: var(--text-600);">—</div>
+            <div class="stat-meta" id="swTopCount">No data yet</div>
+          </div>
+        </div>
+
+        <!-- Top Transitions -->
+        <div class="card mb-5">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Most Frequent Transitions</div>
+              <div class="card-desc">Your most common transitions</div>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>From</th>
+                  <th style="width:30px; text-align:center;"></th>
+                  <th>To</th>
+                  <th>Category Change</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody id="transitionsBody">
+                <tr><td colspan="5">
+                  <div class="empty">
+                    <div class="empty-icon">🔄</div>
+                    <div class="empty-title">No switch data yet</div>
+                    <div class="empty-desc">Switch between apps and tabs to start tracking activity.</div>
+                  </div>
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Switches Timeline -->
+        <div class="card mb-5">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Recent Switch Events</div>
+              <div class="card-desc">Recent transitions</div>
+            </div>
+          </div>
+          <div id="switchTimeline" class="timeline">
+            <div class="empty">
+              <div class="empty-icon">🕒</div>
+              <div class="empty-title">No recent switches</div>
+              <div class="empty-desc">Recent transitions will appear here as you switch between apps and tabs.</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /tab-switches -->
+
+      <!-- ═══════ TAB: ACTIVITY & APPS TELEMETRY ═══════ -->
+      <div id="tab-telemetry" class="tab-pane fitness-pane">
+
+        <section class="fitness-section-hero mb-5">
+          <div class="fitness-section-kicker">Telemetry</div>
+          <h2 class="fitness-section-title">Activity &amp; Apps</h2>
+          <p class="fitness-section-desc">Live desktop and browsing activity with Fitness-style status rings and metrics.</p>
+        </section>
+
+        <!-- Currently Active App -->  
+        <div class="card mb-5 fitness-active-app" id="activeAppCard">
+          <div class="card-body" style="display:flex; align-items:center; gap:16px; padding: 18px 20px;">
+            <div class="fitness-active-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#FA114F;margin-bottom:3px;">Currently Active App</div>
+              <div id="activeAppName" style="font-size:18px;font-weight:800;color:var(--text-900);letter-spacing:-.5px;">Detecting…</div>
+              <div id="activeAppTitle" style="font-size:12px;color:var(--text-400);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;">
+              <div id="activeAppCategory" style="font-size:12px;font-weight:600;color:var(--text-500);"></div>
+              <div id="activeAppTier" style="margin-top:4px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Stats Row -->
+        <div class="stats-grid mb-5" style="grid-template-columns: repeat(3,1fr);">
+          <div class="stat-card card-hover fitness-stat accent-lime" style="--stat-accent:#A6FF00;">
+            <div class="stat-header"><div class="stat-label">Productive App Time</div>
+              <div class="stat-icon fitness-icon lime">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="sysProdVal" style="color:#A6FF00;">—</div>
+            <div class="stat-meta" id="sysProdMeta">Desktop apps only</div>
+          </div>
+          <div class="stat-card card-hover fitness-stat accent-coral" style="--stat-accent:#FA114F;">
+            <div class="stat-header"><div class="stat-label">App Switches Today</div>
+              <div class="stat-icon fitness-icon coral">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="sysSwitchVal" style="color:#FA114F;">—</div>
+            <div class="stat-meta">App switches today</div>
+          </div>
+          <div class="stat-card card-hover fitness-stat accent-cyan" style="--stat-accent:#00F0FF;">
+            <div class="stat-header"><div class="stat-label">Total Screen Time</div>
+              <div class="stat-icon fitness-icon cyan">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="sysTimeVal" style="color:#00F0FF;">—</div>
+            <div class="stat-meta">Total time on desktop apps</div>
+          </div>
+        </div>
+
+        <!-- Combined Activity & App History -->
+        <div class="card mb-5">
+          <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div>
+              <div class="card-title">Activity & App History</div>
+              <div class="card-desc">Combined real-time history of web browsing and desktop application usage</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="btn btn-sm btn-primary activity-filter-btn active" data-filter="all" id="filterActivityAll">All Activity</button>
+              <button class="btn btn-sm btn-secondary activity-filter-btn" data-filter="browsing" id="filterActivityBrowsing">🌐 Browsing Websites</button>
+              <button class="btn btn-sm btn-secondary activity-filter-btn" data-filter="desktop" id="filterActivityDesktop">🖥️ Desktop Apps</button>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Type / Source</th>
+                  <th>Title / Application</th>
+                  <th>Domain / Process</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Time Spent</th>
+                </tr>
+              </thead>
+              <tbody id="telemetryBody">
+                <tr><td colspan="6">
+                  <div class="empty">
+                    <div class="empty-icon">📊</div>
+                    <div class="empty-title">No activity recorded yet today</div>
+                    <div class="empty-desc">Connect the browser extension or run the Desktop Agent. Activity will appear here automatically.</div>
+                  </div>
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Dedicated Desktop Apps Table -->
+        <div class="card mb-5">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Desktop Apps Breakdown</div>
+              <div class="card-desc">Time spent in each application</div>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Application</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Time Spent</th>
+                </tr>
+              </thead>
+              <tbody id="sysAppsBody">
+                <tr><td colspan="4"><div class="empty"><div class="empty-icon">🖥️</div><div class="empty-title">No desktop app activity yet</div><div class="empty-desc">Desktop apps appear here as the agent tracks them.</div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- App Switch Timeline -->
+        <div class="card mb-5">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🔄 App Switch Timeline</div>
+              <div class="card-desc">Recent transitions between apps</div>
+            </div>
+          </div>
+          <div id="sysTimeline" class="timeline">
+            <div class="empty">
+              <div class="empty-icon">⏳</div>
+              <div class="empty-title">No switches recorded yet</div>
+              <div class="empty-desc">Switch between applications and events appear here in real-time.</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /tab-telemetry -->
+
+      <!-- ═══════ TAB: FOCUS SPRINT ═══════ -->
+      <div id="tab-focus" class="tab-pane fitness-pane">
+        <div class="timer-page">
+          <div class="timer-main">
+            <div class="card timer-card fitness-focus-card">
+              <div class="fitness-section-kicker" style="margin-bottom:8px;">Move · Exercise · Stand</div>
+              <h2 class="fitness-focus-title">Focus Session</h2>
+              <p class="fitness-focus-desc">Start a focus session and let the activity ring track your uninterrupted time.</p>
+
+              <div class="fitness-focus-stage">
+                <div id="focusSessionStatusBadge" class="fitness-focus-badge">IDLE</div>
+                <div class="timer-ring-wrap" aria-label="Focus session elapsed time">
+                  <svg class="timer-ring" viewBox="0 0 220 220" aria-hidden="true">
+                    <defs>
+                      <linearGradient id="focusRingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FA114F"/>
+                        <stop offset="55%" stop-color="#A6FF00"/>
+                        <stop offset="100%" stop-color="#00F0FF"/>
+                      </linearGradient>
+                    </defs>
+                    <circle class="timer-ring-bg" cx="110" cy="110" r="94" stroke-width="10"/>
+                    <circle class="timer-ring-progress" id="focusRingProgress" cx="110" cy="110" r="94" stroke="url(#focusRingGradient)" stroke-width="10"/>
+                    <circle cx="110" cy="110" r="76" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="2"/>
+                  </svg>
+                  <div class="timer-center">
+                    <div class="timer-digits" id="timerDisplay">00:00</div>
+                    <div class="timer-label" id="timerLabel">Ready to start</div>
+                  </div>
+                </div>
+
+                <div class="fitness-focus-actions">
+                  <button class="btn btn-primary btn-lg" id="startTimerBtn" style="min-width:160px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Start Session
+                  </button>
+                  <button class="btn btn-danger btn-lg" id="endTimerBtn" style="min-width:160px; display:none; font-weight:700;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+                    Stop Session
+                  </button>
+                </div>
+                <div class="fitness-focus-legend">
+                  <span><i style="background:#FA114F"></i> Move</span>
+                  <span><i style="background:#A6FF00"></i> Exercise</span>
+                  <span><i style="background:#00F0FF"></i> Stand</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /timer-page -->
+      </div><!-- /tab-focus -->
+
+      <!-- ═══════ TAB: FOCUS SHIELD ═══════ -->
+      <div id="tab-blocker" class="tab-pane">
+        <section class="fs-hero fitness-shield-hero" id="shieldHero">
+          <div class="fs-hero-grid" aria-hidden="true"></div>
+          <div class="fs-hero-inner">
+            <div class="fs-hero-copy">
+              <div class="fs-kicker">
+                <span class="fs-kicker-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>
+                Focus Shield
+              </div>
+              <h2 class="fs-hero-title">Your distraction firewall</h2>
+              <p class="fs-hero-desc">Lock apps and sites behind a session-armed shield. Idle until you start focus — then nothing slips through.</p>
+              <div class="fs-hero-actions">
+                <button class="btn btn-primary" id="btnOpenBlocklistModal">Manage Blocklist</button>
+                <button class="btn btn-secondary" id="testBlockerShieldBtn" type="button">Check Status</button>
+                <span class="fs-status-pill" id="appBlockerStatusBadge">Ready</span>
+              </div>
+            </div>
+            <div class="fs-hero-visual">
+              <div class="fs-activity-rings" id="shieldActivityRings" aria-hidden="true">
+                <svg viewBox="0 0 160 160" width="150" height="150">
+                  <circle cx="80" cy="80" r="66" fill="none" stroke="rgba(250,17,79,0.15)" stroke-width="12"/>
+                  <circle class="fs-ring fs-ring-apps" cx="80" cy="80" r="66" fill="none" stroke="#FA114F" stroke-width="12" stroke-linecap="round" stroke-dasharray="415" stroke-dashoffset="120" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="50" fill="none" stroke="rgba(166,255,0,0.15)" stroke-width="12"/>
+                  <circle class="fs-ring fs-ring-sites" cx="80" cy="80" r="50" fill="none" stroke="#A6FF00" stroke-width="12" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="90" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="34" fill="none" stroke="rgba(0,240,255,0.15)" stroke-width="12"/>
+                  <circle class="fs-ring fs-ring-mode" cx="80" cy="80" r="34" fill="none" stroke="#00F0FF" stroke-width="12" stroke-linecap="round" stroke-dasharray="214" stroke-dashoffset="160" transform="rotate(-90 80 80)"/>
+                </svg>
+                <div class="fs-rings-center">
+                  <span class="fs-rings-label">Shield</span>
+                  <strong id="shieldRingsCenter">Idle</strong>
+                </div>
+              </div>
+              <div class="fs-hero-meters">
+                <div class="fs-meter accent-coral">
+                  <div class="fs-meter-value" id="shieldAppsStat">0</div>
+                  <div class="fs-meter-label">Blocked Apps</div>
+                </div>
+                <div class="fs-meter accent-lime">
+                  <div class="fs-meter-value" id="shieldDomainsStat">0</div>
+                  <div class="fs-meter-label">Blocked Sites</div>
+                </div>
+                <div class="fs-meter accent-cyan fs-meter-mode">
+                  <div class="fs-meter-value" id="shieldModeStat">Idle</div>
+                  <div class="fs-meter-label">Shield Mode</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="fs-panels" id="shieldPanels">
+          <div class="fs-panel card fitness-shield-panel">
+            <div class="fs-panel-head">
+              <div>
+                <div class="fs-panel-title">Desktop Apps</div>
+                <div class="fs-panel-desc">Minimized on Windows during active sessions</div>
+              </div>
+              <span class="fs-count-pill coral" id="shieldAppsBadge">0 apps</span>
+            </div>
+            <div class="fs-panel-body shield-chip-list" id="shieldAppsPreview">
+              <div class="empty-inline">No apps blocked yet.</div>
+            </div>
+          </div>
+          <div class="fs-panel card fitness-shield-panel">
+            <div class="fs-panel-head">
+              <div>
+                <div class="fs-panel-title">Websites</div>
+                <div class="fs-panel-desc">Blocked by the extension while you focus</div>
+              </div>
+              <span class="fs-count-pill cyan" id="shieldDomainsBadge">0 sites</span>
+            </div>
+            <div class="fs-panel-body shield-chip-list" id="shieldDomainsPreview">
+              <div class="empty-inline">No websites blocked yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fs-howto card fitness-shield-howto" id="shieldHowto">
+          <div class="fs-howto-grid">
+            <div class="fs-step">
+              <div class="fs-step-num coral">01</div>
+              <div class="fs-step-title">Curate the list</div>
+              <p class="fs-step-copy">Add the apps and domains that steal your attention.</p>
+            </div>
+            <div class="fs-step">
+              <div class="fs-step-num lime">02</div>
+              <div class="fs-step-title">Start a session</div>
+              <p class="fs-step-copy">Shield arms only while a focus session is live.</p>
+            </div>
+            <div class="fs-step">
+              <div class="fs-step-num cyan">03</div>
+              <div class="fs-step-title">Stay in flow</div>
+              <p class="fs-step-copy">Sites show a block overlay; desktop apps get minimized.</p>
+            </div>
+          </div>
+        </div>
+      </div><!-- /tab-blocker -->
+
+      <!-- ═══════ TAB: BREAK ═══════ -->
+      <div id="tab-break" class="tab-pane">
+        <section class="break-hero">
+          <div class="break-hero-inner">
+            <div class="break-hero-copy">
+              <div class="break-kicker">Rest &amp; Recover</div>
+              <h2 class="break-hero-title">Take a break</h2>
+              <p class="break-hero-desc">Pick a duration on the clock, then start. Focus sessions and Focus Shield pause until the timer ends — then you’ll return to the dashboard.</p>
+            </div>
+            <div class="break-status-pill" id="breakStatusPill">Ready</div>
+          </div>
+        </section>
+
+        <!-- Idle / picker state -->
+        <div class="break-layout" id="breakPickerPanel">
+          <div class="card break-clock-card">
+            <div class="break-clock-wrap">
+              <div class="break-clock" id="breakClockFace" aria-label="Break duration clock">
+                <div class="break-clock-face">
+                  <div class="break-clock-hand" id="breakClockHand"></div>
+                  <div class="break-clock-center"></div>
+                  <button type="button" class="break-clock-mark" data-mins="5" style="--i:0">5</button>
+                  <button type="button" class="break-clock-mark" data-mins="10" style="--i:1">10</button>
+                  <button type="button" class="break-clock-mark" data-mins="15" style="--i:2">15</button>
+                  <button type="button" class="break-clock-mark" data-mins="20" style="--i:3">20</button>
+                  <button type="button" class="break-clock-mark" data-mins="25" style="--i:4">25</button>
+                  <button type="button" class="break-clock-mark" data-mins="30" style="--i:5">30</button>
+                  <button type="button" class="break-clock-mark" data-mins="45" style="--i:6">45</button>
+                  <button type="button" class="break-clock-mark" data-mins="60" style="--i:7">60</button>
+                </div>
+              </div>
+              <div class="break-clock-readout">
+                <div class="break-clock-mins" id="breakSelectedMins">5</div>
+                <div class="break-clock-unit">minutes</div>
+              </div>
+            </div>
+
+            <div class="break-presets" id="breakPresetRow">
+              <button type="button" class="break-preset active" data-mins="5">5m</button>
+              <button type="button" class="break-preset" data-mins="10">10m</button>
+              <button type="button" class="break-preset" data-mins="15">15m</button>
+              <button type="button" class="break-preset" data-mins="20">20m</button>
+              <button type="button" class="break-preset" data-mins="30">30m</button>
+              <button type="button" class="break-preset" data-mins="45">45m</button>
+            </div>
+
+            <div class="break-custom-row">
+              <label class="break-custom-label" for="breakCustomMins">Custom minutes</label>
+              <input type="number" id="breakCustomMins" class="form-input break-custom-input" min="1" max="90" value="5" />
+            </div>
+
+            <button class="btn btn-primary break-start-btn" id="takeBreakBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Take a Break
+            </button>
+          </div>
+
+          <div class="card break-info-card">
+            <div class="card-title">During your break</div>
+            <ul class="break-info-list">
+              <li>Focus Session controls are paused</li>
+              <li>Focus Shield stops blocking sites &amp; apps</li>
+              <li>When time’s up, you land back on the Dashboard</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Running state -->
+        <div class="break-running" id="breakRunningPanel" style="display:none;">
+          <div class="card break-running-card">
+            <div class="break-running-badge">Break in progress</div>
+            <div class="break-running-clock" id="breakLiveClock">05:00</div>
+            <div class="break-running-meta" id="breakLiveMeta">Focus &amp; Shield paused</div>
+            <div class="break-progress-track">
+              <div class="break-progress-fill" id="breakProgressFill" style="width:100%;"></div>
+            </div>
+            <button class="btn btn-secondary" id="endBreakEarlyBtn">End Break Early</button>
+          </div>
+        </div>
+      </div><!-- /tab-break -->
+
+      <!-- ═══════ TAB: GOALS ═══════ -->
+      <div id="tab-goals" class="tab-pane">
+        <section class="goals-hero" id="goalsHero">
+          <div class="goals-hero-inner">
+            <div>
+              <div class="goals-kicker">Targets</div>
+              <h2 class="goals-hero-title">Aim your attention</h2>
+              <p class="goals-hero-desc">Set focus-hour targets, watch progress fill, and clear goals when you’re done.</p>
+            </div>
+            <button class="btn btn-primary" id="addGoalBtn" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Goal
+            </button>
+          </div>
+        </section>
+
+        <div class="goals-create-panel card" id="goalCreatePanel" style="display:none;">
+          <div class="goals-create-head">
+            <div class="card-title">Create a goal</div>
+            <button type="button" class="logout-btn" id="cancelGoalCreateBtn" title="Close">✕</button>
+          </div>
+          <div class="goals-create-grid">
+            <div class="form-field">
+              <label for="goalTitleInput">Title</label>
+              <input type="text" id="goalTitleInput" class="form-input" placeholder="e.g. Ship ML coursework" maxlength="120">
+            </div>
+            <div class="form-field">
+              <label for="goalDurationInput">Target duration</label>
+              <div class="goals-duration-row">
+                <input type="number" id="goalDurationInput" class="form-input" min="1" max="10000" value="90" step="1">
+                <div class="goals-unit-toggle" role="group" aria-label="Duration unit">
+                  <button type="button" class="goals-unit-btn active" id="goalUnitMins" data-unit="mins">Minutes</button>
+                  <button type="button" class="goals-unit-btn" id="goalUnitHours" data-unit="hours">Hours</button>
+                </div>
+              </div>
+              <div class="form-hint" id="goalDurationHint">Example: 90 minutes of deep focus</div>
+            </div>
+          </div>
+          <div class="goals-create-actions">
+            <button type="button" class="btn btn-secondary" id="cancelGoalCreateBtn2">Cancel</button>
+            <button type="button" class="btn btn-primary" id="submitGoalBtn">Create Goal</button>
+          </div>
+        </div>
+
+        <div class="goals-grid" id="goalsList">
+          <div class="goals-empty empty" style="grid-column:1/-1;">
+            <div class="empty-icon">◎</div>
+            <div class="empty-title">No goals yet</div>
+            <div class="empty-desc">Create a target in minutes or hours and track your focus progress.</div>
+          </div>
+        </div>
+      </div><!-- /tab-goals -->
+
+      <!-- ═══════ TAB: ACHIEVEMENTS, STREAKS & HEATMAP ═══════ -->
+      <div id="tab-achievements" class="tab-pane">
+        <section class="ach-streak-hero" id="achStreakHero">
+          <div class="ach-streak-glow"></div>
+          <div class="ach-streak-inner">
+            <div class="ach-streak-main">
+              <div class="ach-flame" aria-hidden="true">
+                <span class="ach-flame-core"></span>
+              </div>
+              <div>
+                <div class="ach-streak-tags">
+                  <span class="ach-pill" id="streakHeroBadge">STREAK</span>
+                  <span class="ach-sub" id="streakHeroSubtitle">Consistency Tracker</span>
+                </div>
+                <div class="ach-streak-days">
+                  <span id="streakHeroDays">0</span>
+                  <span class="ach-streak-unit">Day Streak</span>
+                </div>
+                <div class="ach-streak-motivation" id="streakHeroMotivation">
+                  Start a focus session today to ignite your streak.
+                </div>
+              </div>
+            </div>
+            <div class="ach-streak-stats">
+              <div class="ach-stat">
+                <div class="ach-stat-label">Best</div>
+                <div class="ach-stat-value" id="streakBestStat">0d</div>
+              </div>
+              <div class="ach-stat">
+                <div class="ach-stat-label">Active Days</div>
+                <div class="ach-stat-value" id="streakTotalDaysStat">0</div>
+              </div>
+              <div class="ach-stat">
+                <div class="ach-stat-label">Emblems</div>
+                <div class="ach-stat-value" id="streakBadgesStat">0/10</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="card ach-heatmap-card" id="achHeatmapCard">
+          <div class="card-header ach-section-head">
+            <div>
+              <div class="card-title">Activity</div>
+              <div class="card-desc">Your focus history · denser cells mean deeper sessions</div>
+            </div>
+            <div class="heatmap-legend">
+              <span>Less</span>
+              <div class="heatmap-legend-cell level-0"></div>
+              <div class="heatmap-legend-cell level-1"></div>
+              <div class="heatmap-legend-cell level-2"></div>
+              <div class="heatmap-legend-cell level-3"></div>
+              <div class="heatmap-legend-cell level-4"></div>
+              <span>More</span>
+            </div>
+          </div>
+          <div class="card-body ach-heatmap-body">
+            <div id="activityHeatmapContainer">
+              <div class="empty"><div class="empty-icon">⏳</div><div class="empty-title">Loading activity map…</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card ach-badges-card mb-5" id="achBadgesCard">
+          <div class="card-header ach-section-head">
+            <div>
+              <div class="card-title">Awards</div>
+              <div class="card-desc">Fitness-style medals for streaks, deep focus, and consistency</div>
+            </div>
+            <div class="ach-filter-toggle">
+              <button type="button" class="ach-filter-btn active" id="filterBadgeAll">All</button>
+              <button type="button" class="ach-filter-btn" id="filterBadgeUnlocked">Earned (<span id="countUnlockedBadges">0</span>)</button>
+              <button type="button" class="ach-filter-btn" id="filterBadgeLocked">In Progress</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="badgesGridContainer" class="ach-badges-grid fitness-awards-grid"></div>
+          </div>
+        </div>
+      </div><!-- /tab-achievements -->
+
+      <!-- ═══════ TAB: PROFILE ═══════ -->
+      <div id="tab-profile" class="tab-pane">
+        <section class="apple-profile" id="appleProfile">
+          <div class="apple-profile-hero">
+            <div class="apple-profile-rings" aria-hidden="true">
+              <svg viewBox="0 0 140 140" width="132" height="132">
+                <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(250,17,79,0.15)" stroke-width="8"/>
+                <circle cx="70" cy="70" r="58" fill="none" stroke="#FA114F" stroke-width="8" stroke-linecap="round" stroke-dasharray="365" stroke-dashoffset="80" transform="rotate(-90 70 70)"/>
+                <circle cx="70" cy="70" r="46" fill="none" stroke="rgba(166,255,0,0.15)" stroke-width="8"/>
+                <circle cx="70" cy="70" r="46" fill="none" stroke="#A6FF00" stroke-width="8" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="70" transform="rotate(-90 70 70)"/>
+                <circle cx="70" cy="70" r="34" fill="none" stroke="rgba(0,240,255,0.15)" stroke-width="8"/>
+                <circle cx="70" cy="70" r="34" fill="none" stroke="#00F0FF" stroke-width="8" stroke-linecap="round" stroke-dasharray="214" stroke-dashoffset="50" transform="rotate(-90 70 70)"/>
+              </svg>
+              <div id="profAvatar" class="apple-profile-avatar">?</div>
+            </div>
+            <div class="apple-profile-identity">
+              <div class="apple-profile-kicker">Profile</div>
+              <h2 class="apple-profile-name" id="profDisplayName">—</h2>
+              <p class="apple-profile-handle" id="profUsername">@user</p>
+              <p class="apple-profile-tagline">Your focus identity · streaks, awards, and personal details</p>
+            </div>
+          </div>
+
+          <div class="apple-profile-stats">
+            <div class="apple-stat-tile accent-coral">
+              <div class="apple-stat-label">Current Streak</div>
+              <div class="apple-stat-value" id="profRecStreak">0d</div>
+            </div>
+            <div class="apple-stat-tile accent-lime">
+              <div class="apple-stat-label">Best Streak</div>
+              <div class="apple-stat-value" id="profRecBest">0d</div>
+            </div>
+            <div class="apple-stat-tile accent-cyan">
+              <div class="apple-stat-label">Active Days</div>
+              <div class="apple-stat-value" id="profRecDays">0</div>
+            </div>
+            <div class="apple-stat-tile accent-tri">
+              <div class="apple-stat-label">Awards</div>
+              <div class="apple-stat-value" id="profRecBadges">0</div>
+            </div>
+          </div>
+
+          <div class="apple-settings-card">
+            <div class="apple-settings-head">
+              <div>
+                <div class="apple-settings-title">Personal Details</div>
+                <div class="apple-settings-desc">Update how your name appears across FocusGuard</div>
+              </div>
+            </div>
+            <div class="apple-settings-list">
+              <label class="apple-settings-row" for="profFirstName">
+                <span class="apple-settings-key">First Name</span>
+                <input type="text" id="profFirstName" class="apple-settings-input" placeholder="Your first name" autocomplete="given-name">
+              </label>
+              <label class="apple-settings-row" for="profLastName">
+                <span class="apple-settings-key">Last Name</span>
+                <input type="text" id="profLastName" class="apple-settings-input" placeholder="Your last name" autocomplete="family-name">
+              </label>
+            </div>
+            <div class="apple-settings-actions">
+              <button class="btn btn-primary" id="saveProfileBtn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Save Changes
+              </button>
+              <div class="form-hint" id="profileMsg"></div>
+            </div>
+          </div>
+
+          <div class="apple-awards-card">
+            <div class="apple-settings-head">
+              <div>
+                <div class="apple-settings-title">Awards</div>
+                <div class="apple-settings-desc">Medals you’ve earned for focus and consistency</div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="switchTab('achievements')">View All</button>
+            </div>
+            <div id="profBadgesOwned" class="apple-awards-grid">
+              <div class="empty">
+                <div class="empty-icon">🏅</div>
+                <div class="empty-title">No awards yet</div>
+                <div class="empty-desc">Complete focus sessions to earn your first medal.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div><!-- /tab-profile -->
+
+      <!-- ═══════ TAB: REPORTS (PDF) ═══════ -->
+      <div id="tab-reports" class="tab-pane">
+        <section class="report-hero card fitness-report-hero">
+          <div class="report-hero-brand">
+            <div class="shield-page-icon fitness-report-mark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div class="report-brand-name">FocusGuard AI</div>
+              <div class="report-brand-tag">Daily Focus Report</div>
+            </div>
+          </div>
+          <div class="report-hero-user">
+            <div class="report-user-name" id="reportUserName">—</div>
+            <div class="report-user-meta" id="reportUserMeta">@user</div>
+            <div class="report-gen-time" id="reportGeneratedAt">Select a date to preview</div>
+          </div>
+          <div class="report-hero-controls">
+            <label class="report-date-label" for="reportDateInput">Report date</label>
+            <input type="date" id="reportDateInput" class="form-input report-date-input">
+            <button class="btn btn-secondary" id="btnGenDateReport">Preview</button>
+            <button class="btn btn-primary" id="btnDownloadPdfReport">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download PDF
+            </button>
+          </div>
+        </section>
+
+        <div class="card mb-5 report-body-card fitness-report-card">
+          <div class="card-body">
+            <div id="dateReportContainer">
+              <div class="empty" id="dateReportPlaceholder">
+                <div class="empty-icon">📄</div>
+                <div class="empty-title">Preview your focus report</div>
+                <div class="empty-desc">Pick a date above. PDFs include the FocusGuard logo, your name, and the exact time generated.</div>
+              </div>
+
+              <div id="dateReportContent" class="report-preview fitness-report-preview" style="display:none;">
+                <div class="report-preview-letterhead">
+                  <div class="report-preview-brand">
+                    <div class="shield-page-icon fitness-report-mark">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div>
+                      <strong>FocusGuard AI</strong>
+                      <span>Attention Intelligence</span>
+                    </div>
+                  </div>
+                  <div class="report-preview-meta">
+                    <div id="reportPreviewUser">—</div>
+                    <div id="reportPreviewGenerated">—</div>
+                  </div>
+                </div>
+
+                <div id="dateReportVerdictBanner" class="report-verdict">
+                  <div>
+                    <div class="report-verdict-row">
+                      <span id="dateReportVerdictBadge" class="badge">VERDICT</span>
+                      <span id="dateReportDateLabel" class="report-date-chip">Date</span>
+                    </div>
+                    <div id="dateReportVerdictReason" class="report-verdict-reason">Evaluating activity…</div>
+                  </div>
+                </div>
+
+                <div class="report-metrics fitness-report-metrics">
+                  <div class="report-metric accent-lime">
+                    <div class="report-metric-label">Productive Time</div>
+                    <div id="dateReportProdHours" class="report-metric-value success">—</div>
+                  </div>
+                  <div class="report-metric accent-coral">
+                    <div class="report-metric-label">Distracted Time</div>
+                    <div id="dateReportDistHours" class="report-metric-value danger">—</div>
+                  </div>
+                  <div class="report-metric accent-cyan">
+                    <div class="report-metric-label">Context Switches</div>
+                    <div id="dateReportSwitches" class="report-metric-value brand">—</div>
+                  </div>
+                  <div class="report-metric accent-coral">
+                    <div class="report-metric-label">Productivity Score</div>
+                    <div id="dateReportScore" class="report-metric-value warn">—</div>
+                  </div>
+                </div>
+
+                <div class="report-section">
+                  <div class="report-section-head">
+                    <span>Focus Sessions</span>
+                    <span class="badge badge-neutral" id="dateReportSessionCount">0 Sessions</span>
+                  </div>
+                  <div id="dateReportSessionsList" class="report-session-list"></div>
+                </div>
+
+                <div class="report-split">
+                  <div>
+                    <div class="report-section-head"><span>Top System Apps</span></div>
+                    <div id="dateReportAppsList" class="report-list"></div>
+                  </div>
+                  <div>
+                    <div class="report-section-head"><span>Top Web Domains</span></div>
+                    <div id="dateReportSitesList" class="report-list"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /tab-reports -->
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- ═══════ MODAL: AI ATTENTION & PRODUCTIVITY ANALYSIS REPORT ═══════ -->
+<div class="modal-overlay ai-modal-overlay" id="aiReportModal">
+  <div class="card ai-modal-card">
+    <div class="ai-modal-header">
+      <div class="ai-modal-brand">
+        <div class="ai-modal-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div>
+          <div class="ai-modal-title">AI Focus Analysis</div>
+          <div class="ai-modal-sub" id="aiModalTimestamp">Personalized focus evaluation</div>
+        </div>
+      </div>
+      <button id="closeAiModalBtn" class="logout-btn ai-modal-close" title="Close">✕</button>
+    </div>
+
+    <div class="ai-modal-body">
+      <div id="aiModalVerdictCard" class="ai-verdict productive">
+        <div class="ai-verdict-top">
+          <span id="aiModalVerdictBadge" class="ai-verdict-badge">PRODUCTIVE</span>
+          <span id="aiModalScoreDisplay" class="ai-verdict-score">Productivity: —</span>
+        </div>
+        <div id="aiModalVerdictReason" class="ai-verdict-reason">Evaluating focus state…</div>
+      </div>
+
+      <div class="ai-metrics-grid">
+        <div class="ai-metric">
+          <div class="ai-metric-label">Productive</div>
+          <div id="aiModalProdTime" class="ai-metric-value success">—</div>
+        </div>
+        <div class="ai-metric">
+          <div class="ai-metric-label">Distracted</div>
+          <div id="aiModalDistTime" class="ai-metric-value danger">—</div>
+        </div>
+        <div class="ai-metric">
+          <div class="ai-metric-label">Switches</div>
+          <div id="aiModalSwitches" class="ai-metric-value brand">—</div>
+        </div>
+        <div class="ai-metric">
+          <div class="ai-metric-label">Focus Index</div>
+          <div id="aiModalFocusIndex" class="ai-metric-value warn">—</div>
+        </div>
+      </div>
+
+      <div id="aiModalDistractorWrap" class="ai-distractors" style="display:none;">
+        <div class="ai-section-label">Top distractions today</div>
+        <div id="aiModalDistractorsList" class="ai-chip-row"></div>
+      </div>
+
+      <div class="ai-section">
+        <div class="ai-section-label">Focus insights</div>
+        <div id="aiModalNarrative" class="ai-narrative">Generating focus insights…</div>
+      </div>
+
+      <div class="ai-section">
+        <div class="ai-section-label">Recommended tips</div>
+        <div id="aiModalRecsGrid" class="ai-recs"></div>
+      </div>
+    </div>
+
+    <div class="ai-modal-footer">
+      <button class="btn btn-secondary" type="button" onclick="window.print()">Print / Export</button>
+      <button class="btn btn-primary" id="aiModalOkBtn" type="button">Close Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MODAL: BREAK & HYDRATION REMINDER (Feature 5) ═══════ -->
+<div class="modal-overlay" id="breakReminderModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.75); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+  <div class="card" style="width:100%; max-width:480px; box-shadow:var(--shadow-xl); border:1.5px solid var(--brand-200); background:var(--surface-0); border-radius:var(--r-xl); overflow:hidden; text-align:center; padding:32px 28px;">
+    
+    <!-- Rest Icon Pulse -->
+    <div style="width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, #10b981 0%, #14b8a6 100%); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; color:white; box-shadow:0 10px 25px -5px rgba(16, 185, 129, 0.4);">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+      </svg>
+    </div>
+
+    <div class="badge badge-productive" style="display:inline-flex; align-items:center; gap:6px; font-size:11px; padding:4px 12px; margin-bottom:12px; font-weight:700;">
+      <span>🧘</span> HEALTHY ATTENTION INTERVAL
+    </div>
+
+    <h2 style="font-size:22px; font-weight:800; color:var(--text-900); margin:0 0 8px 0;">Time to Rest & Refresh</h2>
+    <p style="font-size:13.5px; color:var(--text-600); line-height:1.6; margin:0 0 20px 0;">
+      You've completed <strong id="breakMinsElapsed" style="color:var(--brand-600);">50 minutes</strong> of continuous deep focus! Take a 5-minute break to restore attention span and alleviate cognitive fatigue.
+    </p>
+
+    <!-- Rest Suggestions Grid -->
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:20px; text-align:center;">
+      <div style="background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-md); padding:12px 6px;">
+        <div style="font-size:22px; margin-bottom:4px;">💧</div>
+        <div style="font-size:11px; font-weight:700; color:var(--text-800);">Hydrate</div>
+        <div style="font-size:10px; color:var(--text-500);">Drink water</div>
+      </div>
+      <div style="background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-md); padding:12px 6px;">
+        <div style="font-size:22px; margin-bottom:4px;">👀</div>
+        <div style="font-size:11px; font-weight:700; color:var(--text-800);">20-20-20 Rule</div>
+        <div style="font-size:10px; color:var(--text-500);">Look 20ft away</div>
+      </div>
+      <div style="background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-md); padding:12px 6px;">
+        <div style="font-size:22px; margin-bottom:4px;">🚶</div>
+        <div style="font-size:11px; font-weight:700; color:var(--text-800);">Move</div>
+        <div style="font-size:10px; color:var(--text-500);">Stand & stretch</div>
+      </div>
+    </div>
+
+    <!-- Countdown Display -->
+    <div style="background:var(--surface-2); border-radius:var(--r-lg); padding:14px; margin-bottom:20px;">
+      <div style="font-size:11px; font-weight:700; color:var(--text-500); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">Suggested Break Countdown</div>
+      <div id="breakCountdownClock" style="font-size:32px; font-weight:900; font-family:monospace; color:var(--color-success); letter-spacing:1px;">05:00</div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="btn btn-primary" id="startBreakTimerBtn" style="padding:12px; font-size:14px; font-weight:700; justify-content:center;">
+        Start 5-Minute Rest Timer
+      </button>
+      <button class="btn btn-secondary" id="dismissBreakBtn" style="padding:10px; font-size:13px; justify-content:center;">
+        Dismiss & Continue Working
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════ MODAL: RETURN TO WORK (Break ended) ═══════ -->
+<div class="modal-overlay" id="returnToWorkModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.78); backdrop-filter:blur(8px); z-index:10000; align-items:center; justify-content:center; padding:20px;">
+  <div class="card" style="width:100%; max-width:440px; box-shadow:var(--shadow-xl); border:1.5px solid var(--brand-200); background:var(--surface-0); border-radius:var(--r-xl); overflow:hidden; text-align:center; padding:32px 28px;">
+    <div style="width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, var(--brand-600) 0%, var(--brand-700) 100%); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; color:white; box-shadow:0 10px 25px -5px rgba(190, 0, 56, 0.4);">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </div>
+
+    <div class="badge" style="display:inline-flex; align-items:center; gap:6px; font-size:11px; padding:4px 12px; margin-bottom:12px; font-weight:700; background:rgba(255,81,105,0.12); color:var(--brand-600); border:1px solid rgba(255,81,105,0.3); border-radius:999px;">
+      BREAK COMPLETE
+    </div>
+
+    <h2 style="font-size:22px; font-weight:800; color:var(--text-900); margin:0 0 8px 0;">Time to Return to Work</h2>
+    <p style="font-size:13.5px; color:var(--text-600); line-height:1.6; margin:0 0 24px 0;">
+      Your break is over. Focus Session and Focus Shield are ready again — jump back in and protect your attention.
+    </p>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="btn btn-primary" id="returnToWorkBtn" style="padding:12px; font-size:14px; font-weight:700; justify-content:center;">
+        Return to Work
+      </button>
+      <button class="btn btn-secondary" id="dismissReturnToWorkBtn" style="padding:10px; font-size:13px; justify-content:center;">
+        Dismiss
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MODAL: MANAGE BLOCKLIST (APPS & SITES) ═══════ -->
+<div class="modal-overlay" id="blocklistModal">
+  <div class="card shield-modal">
+    <div class="shield-modal-header">
+      <div class="shield-page-title-row">
+        <div class="shield-page-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="shield-modal-title">Manage Blocklist</div>
+          <div class="shield-modal-sub">Customize blocked apps and websites for focus sessions</div>
+        </div>
+      </div>
+      <button id="closeBlocklistModalBtn" class="logout-btn shield-modal-close" title="Close">✕</button>
+    </div>
+
+    <div class="shield-modal-tabs">
+      <button id="tabBtnBlockApps" class="shield-tab active">
+        Desktop Apps (<span id="blockedAppsCount">0</span>)
+      </button>
+      <button id="tabBtnBlockDomains" class="shield-tab">
+        Websites (<span id="blockedDomainsCount">0</span>)
+      </button>
+    </div>
+
+    <div class="shield-modal-body">
+      <div id="blocklistPaneApps" class="shield-pane">
+        <div class="shield-add-row">
+          <input type="text" id="newBlockedAppInput" class="form-input" placeholder="e.g. discord.exe, spotify.exe, Steam">
+          <button class="btn btn-primary" id="btnAddBlockedApp">Add App</button>
+        </div>
+        <div class="form-hint">Use process / app names (Windows: <code>discord.exe</code> · macOS: <code>Discord</code>).</div>
+        <div class="shield-list-label">Currently blocked apps</div>
+        <div id="blockedAppsContainer" class="shield-chip-list"></div>
+      </div>
+
+      <div id="blocklistPaneDomains" class="shield-pane" style="display:none;">
+        <div class="shield-add-row">
+          <input type="text" id="newBlockedDomainInput" class="form-input" placeholder="e.g. reddit.com, twitch.tv, x.com">
+          <button class="btn btn-primary" id="btnAddBlockedDomain">Add Site</button>
+        </div>
+        <div class="form-hint">Enter domain names like <code>twitter.com</code> or <code>instagram.com</code>.</div>
+        <div class="shield-list-label">Currently blocked domains</div>
+        <div id="blockedDomainsContainer" class="shield-chip-list"></div>
+      </div>
+    </div>
+
+    <div class="shield-modal-footer">
+      <button class="btn btn-secondary btn-sm" id="btnResetBlocklistDefaults">Reset Defaults</button>
+      <div class="shield-action-btns">
+        <button class="btn btn-secondary btn-sm" id="btnCancelBlocklist">Cancel</button>
+        <button class="btn btn-primary btn-sm" id="btnSaveBlocklist">Save & Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/i18n.js?v=20260925_lang_v1"></script>
+<script src="/static/app.js?v=20260925_fitness_panes_v1"></script>
+<script src="/static/ui-interactions.js?v=20260925_fitness_panes_v1"></script>
+</body>
+</html>

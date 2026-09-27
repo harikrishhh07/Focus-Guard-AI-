@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Focus Guard AI — Biometric Telemetry &amp; Activity Rings</title>
+<!-- Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&amp;family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS & Theme Config Verbatim -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-surface": "#e4e2e4",
+            "error": "#ffb4ab",
+            "on-tertiary": "#00363a",
+            "secondary-fixed-dim": "#b0d500",
+            "on-primary-fixed-variant": "#920029",
+            "surface-variant": "#353437",
+            "primary-container": "#ff5169",
+            "secondary-fixed": "#caf300",
+            "tertiary": "#00dbe9",
+            "on-surface-variant": "#e7bcbd",
+            "surface-dim": "#131315",
+            "on-primary-container": "#5b0016",
+            "surface": "#131315",
+            "inverse-on-surface": "#303032",
+            "primary-fixed": "#ffdadb",
+            "surface-tint": "#ffb2b6",
+            "on-error": "#690005",
+            "tertiary-fixed-dim": "#00dbe9",
+            "on-secondary-container": "#596c00",
+            "surface-container": "#1f1f21",
+            "outline-variant": "#5d3f40",
+            "on-secondary-fixed": "#171e00",
+            "secondary-container": "#caf300",
+            "on-secondary-fixed-variant": "#3e4c00",
+            "on-secondary": "#2a3400",
+            "tertiary-container": "#00a0aa",
+            "surface-container-low": "#1b1b1d",
+            "outline": "#ae8789",
+            "primary-fixed-dim": "#ffb2b6",
+            "on-tertiary-fixed-variant": "#004f54",
+            "background": "#131315",
+            "surface-container-lowest": "#0e0e10",
+            "surface-container-high": "#2a2a2c",
+            "on-tertiary-fixed": "#002022",
+            "on-error-container": "#ffdad6",
+            "surface-bright": "#39393b",
+            "tertiary-fixed": "#7df4ff",
+            "on-surface": "#e4e2e4",
+            "surface-container-highest": "#353437",
+            "on-primary-fixed": "#40000d",
+            "secondary": "#ffffff",
+            "on-background": "#e4e2e4",
+            "inverse-primary": "#be0038",
+            "error-container": "#93000a",
+            "on-primary": "#67001a",
+            "on-tertiary-container": "#002f33",
+            "primary": "#ffb2b6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "gutter-compact": "0.75rem",
+            "margin-desktop": "2rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "space-xl": "2.5rem",
+            "space-md": "1rem",
+            "gutter-expanded": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem"
+          },
+          "fontFamily": {
+            "metric-digit-md": [
+              "Space Grotesk"
+            ],
+            "display-hero": [
+              "Space Grotesk"
+            ],
+            "display-hero-mobile": [
+              "Space Grotesk"
+            ],
+            "headline-lg": [
+              "Space Grotesk"
+            ],
+            "metric-digit-xl": [
+              "Space Grotesk"
+            ],
+            "label-caps": [
+              "Space Grotesk"
+            ],
+            "headline-sm": [
+              "Space Grotesk"
+            ],
+            "body-sm": [
+              "Hanken Grotesk"
+            ],
+            "label-ui": [
+              "Hanken Grotesk"
+            ],
+            "headline-xl": [
+              "Space Grotesk"
+            ],
+            "body-lg": [
+              "Hanken Grotesk"
+            ],
+            "headline-md": [
+              "Space Grotesk"
+            ],
+            "body-md": [
+              "Hanken Grotesk"
+            ]
+          },
+          "fontSize": {
+            "metric-digit-md": [
+              "24px",
+              {
+                "lineHeight": "28px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "700"
+              }
+            ],
+            "display-hero": [
+              "56px",
+              {
+                "lineHeight": "64px",
+                "letterSpacing": "-0.03em",
+                "fontWeight": "700"
+              }
+            ],
+            "display-hero-mobile": [
+              "36px",
+              {
+                "lineHeight": "44px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-lg": [
+              "24px",
+              {
+                "lineHeight": "32px",
+                "letterSpacing": "-0.015em",
+                "fontWeight": "600"
+              }
+            ],
+            "metric-digit-xl": [
+              "44px",
+              {
+                "lineHeight": "48px",
+                "letterSpacing": "-0.03em",
+                "fontWeight": "700"
+              }
+            ],
+            "label-caps": [
+              "11px",
+              {
+                "lineHeight": "14px",
+                "letterSpacing": "0.08em",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-sm": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "letterSpacing": "0em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "letterSpacing": "0.01em",
+                "fontWeight": "400"
+              }
+            ],
+            "label-ui": [
+              "13px",
+              {
+                "lineHeight": "18px",
+                "letterSpacing": "0.005em",
+                "fontWeight": "500"
+              }
+            ],
+            "headline-xl": [
+              "32px",
+              {
+                "lineHeight": "40px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "letterSpacing": "0.01em",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-md": [
+              "20px",
+              {
+                "lineHeight": "28px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "letterSpacing": "0em",
+                "fontWeight": "400"
+              }
+            ]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    /* Custom glow and ring utilities aligned with the Design System tokens */
+    .glow-coral {
+      box-shadow: 0 0 28px rgba(250, 17, 79, 0.22);
+    }
+    .glow-chartreuse {
+      box-shadow: 0 0 28px rgba(202, 243, 0, 0.20);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 28px rgba(0, 219, 233, 0.22);
+    }
+    .glass-card {
+      background: rgba(28, 28, 30, 0.72);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-interactive:hover {
+      background: rgba(42, 42, 44, 0.85);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+    .glass-subtle {
+      background: rgba(18, 18, 20, 0.82);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    /* Concentric progress smooth transitions */
+    .ring-track {
+      transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- PERSISTENT SIDEBAR NAVIGATION (JSON: SideNavBar) -->
+<aside class="fixed top-0 left-0 h-screen w-64 z-40 bg-surface-container-lowest/90 backdrop-blur-2xl shadow-2xl border-r border-outline-variant/20 flex flex-col justify-between p-space-md select-none">
+<!-- Top Header & Brand -->
+<div>
+<div class="flex items-center gap-3 px-2 py-3 mb-6">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-container via-surface-variant to-tertiary-container flex items-center justify-center p-0.5 shadow-md shadow-primary-container/20">
+<div class="w-full h-full bg-surface-container-lowest rounded-[10px] flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="shield" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+</div>
+<div>
+<h1 class="text-headline-sm font-headline-sm font-bold tracking-tight text-on-surface">Focus Guard AI</h1>
+<p class="text-body-sm font-body-sm text-outline flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse"></span>
+            Deep Focus Guard Active
+          </p>
+</div>
+</div>
+<!-- Navigation Links (Active state determined for Dashboard) -->
+<nav class="space-y-1.5">
+<div class="text-label-caps font-label-caps text-outline px-3 pt-2 pb-1.5 tracking-wider">ANALYTICS</div>
+<a class="flex items-center gap-space-sm bg-surface-container-high text-primary font-semibold rounded-lg px-space-md py-2.5 shadow-sm active:scale-[0.97] transition-all" href="#overview">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="radar" style="font-variation-settings: 'FILL' 1;">radar</span>
+<span class="text-label-ui font-label-ui">Overview</span>
+</a>
+<a class="flex items-center gap-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 rounded-lg px-space-md py-2.5 transition-all active:scale-[0.97]" href="#rings">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="donut_large">donut_large</span>
+<span class="text-label-ui font-label-ui">Focus Rings</span>
+</a>
+<a class="flex items-center gap-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 rounded-lg px-space-md py-2.5 transition-all active:scale-[0.97]" href="#guard">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="shield">shield</span>
+<span class="text-label-ui font-label-ui">Distraction Guard</span>
+</a>
+<a class="flex items-center gap-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 rounded-lg px-space-md py-2.5 transition-all active:scale-[0.97]" href="#soundscapes">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="headphones">headphones</span>
+<span class="text-label-ui font-label-ui">Soundscapes</span>
+</a>
+<a class="flex items-center gap-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 rounded-lg px-space-md py-2.5 transition-all active:scale-[0.97]" href="#telemetry">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="analytics">analytics</span>
+<span class="text-label-ui font-label-ui">Telemetry</span>
+</a>
+<div class="text-label-caps font-label-caps text-outline px-3 pt-4 pb-1.5 tracking-wider">COGNITIVE TOOLS</div>
+<a class="flex items-center gap-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 rounded-lg px-space-md py-2.5 transition-all" href="#session">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="timer">timer</span>
+<span class="text-label-ui font-label-ui">Focus Session</span>
+</a>
+<a class="flex items-center gap-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 rounded-lg px-space-md py-2.5 transition-all" href="#goals">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="flag">flag</span>
+<span class="text-label-ui font-label-ui">Goals &amp; Rings</span>
+</a>
+<a class="flex items-center gap-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 rounded-lg px-space-md py-2.5 transition-all" href="#badges">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="military_tech">military_tech</span>
+<span class="text-label-ui font-label-ui">Badges &amp; Streaks</span>
+</a>
+</nav>
+</div>
+<!-- SideNav CTA & User Footer -->
+<div class="space-y-4 pt-4 border-t border-outline-variant/20">
+<!-- CTA Action from SideNav JSON -->
+<button class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-primary-container to-[#ff2a51] text-secondary font-headline-sm text-headline-sm font-semibold flex items-center justify-center gap-2 shadow-lg glow-coral hover:brightness-105 active:scale-[0.97] transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span>Trigger Focus Lock</span>
+</button>
+<!-- Footer Subnav -->
+<div class="flex items-center justify-around py-1">
+<a class="flex items-center gap-1.5 text-body-sm font-body-sm text-outline hover:text-on-surface transition-colors" href="#settings">
+<span class="material-symbols-outlined text-base" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<div class="w-px h-3 bg-outline-variant/40"></div>
+<a class="flex items-center gap-1.5 text-body-sm font-body-sm text-outline hover:text-on-surface transition-colors" href="#support">
+<span class="material-symbols-outlined text-base" data-icon="help">help</span>
+<span>Support</span>
+</a>
+</div>
+<!-- Dev User Profile Chip with Neon Status -->
+<div class="flex items-center justify-between p-2 rounded-xl bg-surface-container-high/50 border border-white/5">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-9 h-9 rounded-lg bg-surface-variant flex items-center justify-center font-headline-sm font-bold text-secondary">
+              D
+            </div>
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-secondary-container border-2 border-surface-container-lowest rounded-full"></span>
+</div>
+<div>
+<div class="text-headline-sm font-headline-sm text-sm text-on-surface">Dev</div>
+<div class="text-body-sm font-body-sm text-secondary-container text-xs flex items-center gap-1">
+<span>• Active</span>
+</div>
+</div>
+</div>
+<button class="text-outline hover:text-on-surface p-1.5 rounded-lg hover:bg-surface-container transition-colors" title="Telemetry Sync Out">
+<span class="material-symbols-outlined text-lg" data-icon="logout">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- MAIN VIEWPORT CONTAINER (Compensates for 64w fixed sidebar) -->
+<div class="pl-64 flex flex-col min-h-screen">
+<!-- DESKTOP UTILITY TOP NAVIGATION (JSON: TopNavBar) -->
+<header class="docked full-width top-0 z-30 h-16 bg-surface/85 backdrop-blur-xl shadow-sm border-b border-outline-variant/30 flex justify-between items-center w-full px-space-lg select-none sticky">
+<!-- Left: Title & Live Pill -->
+<div class="flex items-center gap-4">
+<div>
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-on-surface">Dashboard</span>
+</div>
+<div class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-container-high border border-outline-variant/40">
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
+<span class="text-label-caps font-label-caps text-secondary-container">LIVE</span>
+<span class="text-body-sm font-body-sm text-outline text-xs">Updated 08:12:52 AM</span>
+</div>
+</div>
+<!-- Right: Utility Cluster, Streak, Actions -->
+<div class="flex items-center gap-3">
+<!-- Streak pill -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/80 border border-white/10 shadow-inner">
+<span class="material-symbols-outlined text-primary-container text-base" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="text-label-caps font-label-caps text-on-surface">2 Days</span>
+</div>
+<!-- Trailing Icon Actions from JSON -->
+<div class="flex items-center gap-1 bg-surface-container-high/40 p-1 rounded-xl border border-white/5">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all active:scale-[0.98]" title="Notifications">
+<span class="material-symbols-outlined text-lg" data-icon="notifications">notifications</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all active:scale-[0.98]" title="Soundscapes &amp; Spatial Audio">
+<span class="material-symbols-outlined text-lg" data-icon="graphic_eq">graphic_eq</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all active:scale-[0.98]" title="Telemetry Calibration">
+<span class="material-symbols-outlined text-lg" data-icon="tune">tune</span>
+</button>
+</div>
+<!-- AI Analysis Pill Action -->
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-tertiary/10 text-tertiary border border-tertiary/30 hover:bg-tertiary/20 hover:border-tertiary/50 transition-all font-label-ui text-label-ui active:scale-[0.98] glow-cyan">
+<span class="material-symbols-outlined text-base" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span>AI Analysis</span>
+</button>
+<div class="w-px h-6 bg-outline-variant/30 mx-1"></div>
+<!-- Primary & Secondary Trailing Actions from JSON -->
+<button class="px-3.5 py-1.5 rounded-xl bg-surface-container-high text-on-surface border border-white/10 hover:bg-surface-bright text-label-ui font-label-ui active:scale-[0.98] transition-all">
+          Take Break
+        </button>
+<button class="px-4 py-1.5 rounded-xl bg-primary-container text-secondary text-label-ui font-label-ui font-semibold hover:brightness-110 active:scale-[0.98] transition-all glow-coral flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base" data-icon="bolt">bolt</span>
+<span>Start Sprint</span>
+</button>
+</div>
+</header>
+<!-- MAIN BODY CANVAS (12-Column Grid Layout) -->
+<main class="flex-1 p-space-lg max-w-[1600px] w-full mx-auto space-y-space-lg">
+<!-- SECTION 1: 5 APPLE FITNESS STYLE METRIC VITALITY CARDS -->
+<section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-space-md">
+<!-- CARD 1: PRODUCTIVE TIME (Chartreuse Lime Accent) -->
+<div class="glass-card rounded-2xl p-space-md relative overflow-hidden group hover:border-secondary-container/40 transition-all">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-secondary-container/10 rounded-full blur-2xl group-hover:bg-secondary-container/20 transition-all pointer-events-none"></div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-caps font-label-caps text-outline tracking-wider">PRODUCTIVE TIME</span>
+<div class="w-7 h-7 rounded-lg bg-secondary-container/15 flex items-center justify-center text-secondary-container">
+<span class="material-symbols-outlined text-base" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="text-metric-digit-xl font-metric-digit-xl tracking-tight text-on-surface flex items-baseline gap-1">
+<span>4h</span>
+<span class="text-headline-lg font-headline-lg text-secondary-container">12m</span>
+</div>
+<!-- Micro Progress Bar -->
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden mt-3">
+<div class="bg-secondary-container h-full rounded-full" style="width: 78%;"></div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-body-sm font-body-sm text-outline">Target 5h 30m</span>
+<span class="text-label-caps font-label-caps text-secondary-container">78%</span>
+</div>
+</div>
+</div>
+<!-- CARD 2: DISTRACTED TIME (Electric Coral Accent) -->
+<div class="glass-card rounded-2xl p-space-md relative overflow-hidden group hover:border-primary-container/40 transition-all">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-primary-container/10 rounded-full blur-2xl group-hover:bg-primary-container/20 transition-all pointer-events-none"></div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-caps font-label-caps text-outline tracking-wider">DISTRACTED TIME</span>
+<div class="w-7 h-7 rounded-lg bg-primary-container/15 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-base" data-icon="priority_high">priority_high</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="text-metric-digit-xl font-metric-digit-xl tracking-tight text-on-surface flex items-baseline gap-1">
+<span>18</span>
+<span class="text-headline-md font-headline-md text-primary-container">min</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden mt-3">
+<div class="bg-primary-container h-full rounded-full" style="width: 14%;"></div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-body-sm font-body-sm text-outline">Shield Defended</span>
+<span class="text-label-caps font-label-caps text-primary-container">94%</span>
+</div>
+</div>
+</div>
+<!-- CARD 3: CONTEXT SWITCHES (Electric Cyan Accent) -->
+<div class="glass-card rounded-2xl p-space-md relative overflow-hidden group hover:border-tertiary/40 transition-all">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-tertiary/10 rounded-full blur-2xl group-hover:bg-tertiary/20 transition-all pointer-events-none"></div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-caps font-label-caps text-outline tracking-wider">CONTEXT SWITCHES</span>
+<div class="w-7 h-7 rounded-lg bg-tertiary/15 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-base" data-icon="sync_alt">sync_alt</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="text-metric-digit-xl font-metric-digit-xl tracking-tight text-on-surface flex items-baseline gap-1">
+<span>6</span>
+<span class="text-headline-sm font-headline-sm text-tertiary">switches</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden mt-3">
+<div class="bg-tertiary h-full rounded-full" style="width: 22%;"></div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-body-sm font-body-sm text-tertiary">Optimal Pace</span>
+<span class="text-label-caps font-label-caps text-outline">-42% vs avg</span>
+</div>
+</div>
+</div>
+<!-- CARD 4: PRODUCTIVITY SCORE (Amber / Neon Gold Ring) -->
+<div class="glass-card rounded-2xl p-space-md relative overflow-hidden group hover:border-[#FFB800]/40 transition-all">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-[#FFB800]/10 rounded-full blur-2xl group-hover:bg-[#FFB800]/20 transition-all pointer-events-none"></div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-caps font-label-caps text-outline tracking-wider">PRODUCTIVITY SCORE</span>
+<div class="w-7 h-7 rounded-lg bg-[#FFB800]/15 flex items-center justify-center text-[#FFB800]">
+<span class="material-symbols-outlined text-base" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="text-metric-digit-xl font-metric-digit-xl tracking-tight text-on-surface flex items-baseline gap-1">
+<span>92</span>
+<span class="text-headline-md font-headline-md text-[#FFB800]">%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden mt-3">
+<div class="bg-[#FFB800] h-full rounded-full" style="width: 92%;"></div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-body-sm font-body-sm text-[#FFB800]">Top 5% Flow</span>
+<span class="text-label-caps font-label-caps text-outline">+8.4 pts</span>
+</div>
+</div>
+</div>
+<!-- CARD 5: EXTENSION STATUS (Chrome & Arc Synced) -->
+<div class="glass-card rounded-2xl p-space-md relative overflow-hidden group hover:border-secondary-container/40 transition-all">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-secondary-container/10 rounded-full blur-2xl group-hover:bg-secondary-container/20 transition-all pointer-events-none"></div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-caps font-label-caps text-outline tracking-wider">SHIELD EXTENSION</span>
+<div class="w-7 h-7 rounded-lg bg-secondary-container/15 flex items-center justify-center text-secondary-container">
+<span class="material-symbols-outlined text-base" data-icon="devices">devices</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2 pt-1 pb-1">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container shadow-[0_0_10px_#caf300]"></span>
+<span class="text-headline-md font-headline-md text-secondary-container font-bold">Connected</span>
+</div>
+<div class="text-body-sm font-body-sm text-outline pt-2 truncate">
+              Arc Browser &amp; Chrome v126
+            </div>
+<div class="flex items-center justify-between pt-1.5 border-t border-white/5">
+<span class="text-label-caps font-label-caps text-on-surface-variant text-[10px]">REALTIME SYNC</span>
+<span class="text-label-caps font-label-caps text-secondary-container text-[10px]">0ms LATENCY</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: ACTIVE FOCUS SESSION BANNER (HERO CARD) -->
+<section class="glass-card rounded-3xl p-space-lg relative overflow-hidden border border-white/10 glow-coral/10">
+<!-- Radial atmospheric glow -->
+<div class="absolute top-0 right-1/4 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-20 -left-20 w-80 h-80 bg-tertiary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+<div class="flex items-start sm:items-center gap-5">
+<div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-container to-[#a70028] flex items-center justify-center text-secondary shadow-lg glow-coral shrink-0">
+<span class="material-symbols-outlined text-3xl" data-icon="timelapse">timelapse</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2.5 flex-wrap">
+<span class="text-label-caps font-label-caps text-primary tracking-wider">FOCUS &amp; PRODUCTIVITY SESSION</span>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-highest text-outline text-label-caps font-label-caps border border-white/10">
+                  IDLE / READY
+                </span>
+<span class="px-2 py-0.5 rounded-md bg-secondary-container/10 text-secondary-container text-label-caps font-label-caps border border-secondary-container/20">
+                  AUTO-SHIELD ON
+                </span>
+</div>
+<h2 class="text-headline-lg font-headline-lg text-on-surface">No Active Session in Progress</h2>
+<p class="text-body-md font-body-md text-outline max-w-2xl">
+                Start a session to actively shield your attention, track context switches, and record your productivity score with neural biometric tracking.
+              </p>
+</div>
+</div>
+<!-- Action and Preset Button Controls -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+<!-- Preset Selector -->
+<div class="flex items-center bg-surface-container-high/60 p-1 rounded-xl border border-white/10">
+<button class="px-3 py-1.5 rounded-lg text-label-ui font-label-ui text-secondary bg-surface-container-highest shadow-sm">25m Sprint</button>
+<button class="px-3 py-1.5 rounded-lg text-label-ui font-label-ui text-outline hover:text-on-surface transition-colors">50m Deep</button>
+<button class="px-3 py-1.5 rounded-lg text-label-ui font-label-ui text-outline hover:text-on-surface transition-colors">90m Ultra</button>
+</div>
+<!-- Start Session Button -->
+<button class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-primary-container to-[#ff1a44] text-secondary text-headline-sm font-headline-sm font-bold flex items-center justify-center gap-2 shadow-xl glow-coral hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<span>Start Session</span>
+</button>
+</div>
+</div>
+</section>
+<!-- SECTION 3: SMART VISION & FOCUS TRACKER (Apple Fitness Biometric Sensor Style) -->
+<section class="glass-subtle rounded-2xl p-space-md border border-white/5 relative">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+<!-- Vision Sensor Indicator -->
+<div class="flex items-center gap-4">
+<div class="relative w-12 h-12 rounded-xl bg-surface-container-high border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-2xl" data-icon="visibility">visibility</span>
+<span class="absolute -top-1 -right-1 w-3 h-3 bg-tertiary rounded-full border-2 border-surface-container-lowest animate-pulse"></span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-label-caps font-label-caps text-outline tracking-wider">SMART VISION &amp; FOCUS TRACKER</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary text-label-caps font-label-caps border border-tertiary/20">
+                  STANDBY
+                </span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Smart Vision on Standby</h3>
+<p class="text-body-sm font-body-sm text-outline">
+                Camera tracking activates automatically when you start a focus session. Privacy-first local neural inference.
+              </p>
+</div>
+</div>
+<!-- Gauges from Screenshot Redesigned -->
+<div class="flex items-center gap-8 self-end sm:self-auto border-t lg:border-t-0 lg:border-l border-white/10 pt-4 lg:pt-0 lg:pl-8">
+<!-- Metric 1: Attention Score -->
+<div class="text-right">
+<div class="text-label-caps font-label-caps text-outline tracking-wider">ATTENTION SCORE</div>
+<div class="text-metric-digit-md font-metric-digit-md text-on-surface flex items-baseline justify-end gap-1">
+<span>94</span>
+<span class="text-body-sm font-body-sm text-tertiary">%</span>
+</div>
+</div>
+<!-- Metric 2: Phone Distractions -->
+<div class="text-right">
+<div class="text-label-caps font-label-caps text-outline tracking-wider">PHONE DISTRACTIONS</div>
+<div class="text-metric-digit-md font-metric-digit-md text-secondary-container">
+                0 <span class="text-headline-sm font-headline-sm">times</span>
+</div>
+</div>
+<!-- Metric 3: Away / Idle -->
+<div class="text-right">
+<div class="text-label-caps font-label-caps text-outline tracking-wider">AWAY / IDLE</div>
+<div class="text-metric-digit-md font-metric-digit-md text-outline">
+                0<span class="text-headline-sm font-headline-sm">s</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: AI FOCUS INSIGHTS BANNER -->
+<section class="p-space-md rounded-2xl bg-gradient-to-r from-tertiary-container/15 via-surface-container to-surface-container-high border border-tertiary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-tertiary/20 flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined text-lg" data-icon="psychology">psychology</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-label-caps font-label-caps text-tertiary">✦ AI FOCUS INSIGHTS</span>
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+<span class="text-body-sm font-body-sm text-outline text-xs">Dynamic Neuro-Analysis</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface mt-0.5">
+              Your cognitive peak is estimated between <span class="font-semibold text-secondary-container">9:00 AM – 11:30 AM</span>. Trigger a 90-min Deep Work Sprint to lock down your highest-impact task early.
+            </p>
+</div>
+</div>
+<button class="px-3.5 py-1.5 rounded-xl bg-tertiary text-on-tertiary font-label-ui text-label-ui font-semibold shrink-0 hover:brightness-110 active:scale-[0.98] transition-all">
+          Apply Strategy
+        </button>
+</section>
+<!-- SECTION 5: ACTIVITY TELEMETRY & PRODUCTIVITY SPLIT (Two Column Apple Fitness Bento) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- LEFT COLUMN (8-Cols): Activity by Category Bar Telemetry Chart -->
+<div class="lg:col-span-8 glass-card rounded-3xl p-space-lg flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-4 border-b border-white/5">
+<div>
+<h3 class="text-headline-lg font-headline-lg text-on-surface">Activity by Category</h3>
+<p class="text-body-sm font-body-sm text-outline">Time spent per application category in minutes (Today)</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-label-caps font-label-caps text-outline">SORT:</span>
+<span class="px-2.5 py-1 rounded-lg bg-surface-container-high text-xs text-on-surface font-label-ui">Duration</span>
+</div>
+</div>
+<!-- Fitness-style Energy Bars Breakdown -->
+<div class="space-y-5 pt-6">
+<!-- Category 1: Development -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between text-body-md font-body-md">
+<div class="flex items-center gap-2.5">
+<span class="w-3 h-3 rounded-md bg-secondary-container shadow-[0_0_8px_#caf300]"></span>
+<span class="text-on-surface font-medium">Engineering &amp; IDE (VS Code, Terminal)</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-metric-digit-md font-metric-digit-md text-on-surface">2h 45m</span>
+<span class="text-label-caps font-label-caps text-secondary-container">58%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden p-0.5">
+<div class="bg-gradient-to-r from-secondary-container to-[#b0d500] h-full rounded-full transition-all duration-700" style="width: 58%;"></div>
+</div>
+</div>
+<!-- Category 2: Research & Docs -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between text-body-md font-body-md">
+<div class="flex items-center gap-2.5">
+<span class="w-3 h-3 rounded-md bg-tertiary shadow-[0_0_8px_#00dbe9]"></span>
+<span class="text-on-surface font-medium">Research &amp; Knowledge Base (Notion, Papers)</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-metric-digit-md font-metric-digit-md text-on-surface">1h 10m</span>
+<span class="text-label-caps font-label-caps text-tertiary">24%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden p-0.5">
+<div class="bg-gradient-to-r from-tertiary to-tertiary-container h-full rounded-full transition-all duration-700" style="width: 24%;"></div>
+</div>
+</div>
+<!-- Category 3: System Design & Architecture -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between text-body-md font-body-md">
+<div class="flex items-center gap-2.5">
+<span class="w-3 h-3 rounded-md bg-[#FFB800] shadow-[0_0_8px_#FFB800]"></span>
+<span class="text-on-surface font-medium">System Architecture (Figma, Excalidraw)</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-metric-digit-md font-metric-digit-md text-on-surface">35m</span>
+<span class="text-label-caps font-label-caps text-[#FFB800]">12%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden p-0.5">
+<div class="bg-gradient-to-r from-[#FFB800] to-[#e0a200] h-full rounded-full transition-all duration-700" style="width: 12%;"></div>
+</div>
+</div>
+<!-- Category 4: Team Sync & Slack (Controlled Distraction) -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between text-body-md font-body-md">
+<div class="flex items-center gap-2.5">
+<span class="w-3 h-3 rounded-md bg-primary-container shadow-[0_0_8px_#ff5169]"></span>
+<span class="text-on-surface font-medium">Communications &amp; Mail (Slack, Linear)</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-metric-digit-md font-metric-digit-md text-on-surface">18m</span>
+<span class="text-label-caps font-label-caps text-primary-container">6%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden p-0.5">
+<div class="bg-gradient-to-r from-primary-container to-[#d4002e] h-full rounded-full transition-all duration-700" style="width: 6%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Micro Timeline Indicator -->
+<div class="pt-6 mt-6 border-t border-white/5 flex items-center justify-between text-body-sm font-body-sm text-outline">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-secondary-container" data-icon="check_circle">check_circle</span>
+              All active trackers synchronized
+            </span>
+<div class="flex gap-2">
+<span class="text-label-caps font-label-caps text-outline">TOTAL TRACKED:</span>
+<span class="text-label-caps font-label-caps text-on-surface">4 HOURS 48 MINUTES</span>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (4-Cols): Concentric Apple Activity Rings Widget -->
+<div class="lg:col-span-4 glass-card rounded-3xl p-space-lg flex flex-col justify-between items-center text-center relative overflow-hidden">
+<div class="w-full flex items-center justify-between pb-2 border-b border-white/5">
+<h3 class="text-headline-md font-headline-md text-on-surface">Productivity Split</h3>
+<span class="text-label-caps font-label-caps text-secondary-container">DAILY RINGS</span>
+</div>
+<!-- Concentric SVG Rings Container -->
+<div class="relative w-64 h-64 my-6 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 220 220">
+<!-- Ring 1 (Outer - Deep Focus / Lime #CAF300) -->
+<circle cx="110" cy="110" fill="none" opacity="0.15" r="92" stroke="#caf300" stroke-width="14"></circle>
+<circle class="ring-track glow-chartreuse" cx="110" cy="110" fill="none" r="92" stroke="#caf300" stroke-dasharray="578" stroke-dashoffset="104" stroke-linecap="round" stroke-width="14"></circle>
+<!-- Ring 2 (Middle - Neutral / Cyan #00DBE9) -->
+<circle cx="110" cy="110" fill="none" opacity="0.15" r="72" stroke="#00dbe9" stroke-width="14"></circle>
+<circle class="ring-track glow-cyan" cx="110" cy="110" fill="none" r="72" stroke="#00dbe9" stroke-dasharray="452" stroke-dashoffset="397" stroke-linecap="round" stroke-width="14"></circle>
+<!-- Ring 3 (Inner - Distracting / Coral #FF5169) -->
+<circle cx="110" cy="110" fill="none" opacity="0.15" r="52" stroke="#ff5169" stroke-width="14"></circle>
+<circle class="ring-track glow-coral" cx="110" cy="110" fill="none" r="52" stroke="#ff5169" stroke-dasharray="326" stroke-dashoffset="306" stroke-linecap="round" stroke-width="14"></circle>
+</svg>
+<!-- Center Metric Callout -->
+<div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
+<span class="text-metric-digit-xl font-metric-digit-xl text-on-surface">82%</span>
+<span class="text-label-caps font-label-caps text-outline tracking-wider">FLOW RATIO</span>
+</div>
+</div>
+<!-- Ring Legend & Category Breakdown -->
+<div class="w-full space-y-2 pt-2 border-t border-white/5">
+<div class="flex items-center justify-between text-body-sm font-body-sm px-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container shadow-[0_0_6px_#caf300]"></span>
+<span class="text-on-surface">Productive</span>
+</div>
+<span class="font-metric-digit-md text-on-surface text-sm">82%</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm px-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_6px_#00dbe9]"></span>
+<span class="text-outline">Neutral Flow</span>
+</div>
+<span class="font-metric-digit-md text-outline text-sm">12%</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm px-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container shadow-[0_0_6px_#ff5169]"></span>
+<span class="text-primary-container">Distracting</span>
+</div>
+<span class="font-metric-digit-md text-primary-container text-sm">6%</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,4 @@
+The Pomodoro Technique, developed by Francesco Cirillo, utilizes 25-minute intervals of uninterrupted focus followed by a 5-minute restorative break.
+After four consecutive cycles, an extended break of 15 to 30 minutes is taken.
+Research indicates that working in time-boxed intervals reduces cognitive overload and curbs the urge to procrastinate.
+For deep knowledge work like software engineering and academic writing, an adapted 50-minute work session followed by a 10-minute break often aligns better with complex mental modeling and deep flow states.

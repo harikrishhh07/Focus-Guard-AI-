@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FocusGuard AI</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">FocusGuard</div>
+          <div class="brand-tag">Attention Intelligence</div>
+        </div>
+      </div>
+      <div id="authStatus" class="status-pill offline">Offline</div>
+    </header>
+
+    <!-- Login -->
+    <section id="loginSection" class="section hidden">
+      <div class="card">
+        <div class="card-title">Connect Collector</div>
+        <p class="card-desc">Sign in with your FocusGuard account to sync browsing activity.</p>
+        <label class="field-label" for="usernameInput">Username</label>
+        <input type="text" id="usernameInput" class="field" placeholder="admin" autocomplete="username" />
+        <label class="field-label" for="passwordInput">Password</label>
+        <input type="password" id="passwordInput" class="field" placeholder="••••••••" autocomplete="current-password" />
+        <div id="loginError" class="error-msg"></div>
+        <button id="loginBtn" class="btn btn-primary">Connect to Web App</button>
+      </div>
+    </section>
+
+    <!-- Connected -->
+    <section id="statsSection" class="section hidden">
+      <div class="status-card">
+        <div class="pulse"></div>
+        <div>
+          <div class="status-title">Browsing telemetry active</div>
+          <div class="status-sub">Collecting URLs & productivity signals</div>
+        </div>
+      </div>
+
+      <div class="metric-row">
+        <span class="metric-label">Today synced</span>
+        <span class="metric-value" id="todaySyncCount">Ready</span>
+      </div>
+
+      <div class="actions">
+        <button id="openAppBtn" class="btn btn-primary">Open FocusGuard App</button>
+        <button id="logoutBtn" class="btn btn-secondary">Disconnect</button>
+      </div>
+      <p class="fine-print">Disconnect stops all browsing tracking until you connect again.</p>
+    </section>
+  </div>
+
+  <script src="api_client.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
