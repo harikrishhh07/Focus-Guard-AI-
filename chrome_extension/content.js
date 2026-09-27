@@ -3,6 +3,21 @@ let lastUserInteraction = Date.now();
 let trackingActive = false;
 let shieldTimer = null;
 
+/**
+ * Returns true when the extension context is still valid.
+ * When the extension is reloaded/updated while a tab is open the service
+ * worker is torn down and any chrome.runtime call throws
+ * "Extension context invalidated". We guard every such call with this check.
+ */
+function isContextValid() {
+  try {
+    // Accessing chrome.runtime.id throws when the context is invalidated.
+    return !!(typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id);
+  } catch (e) {
+    return false;
+  }
+}
+
 function markActive() {
   if (!trackingActive) return;
   lastUserInteraction = Date.now();
@@ -22,6 +37,7 @@ function isExtensionLinked(stored) {
 
 async function refreshTrackingActive() {
   try {
+    if (!isContextValid()) { trackingActive = false; return false; }
     const stored = await chrome.storage.local.get([
       "manuallyDisconnected",
       "jwtAccessToken",
@@ -66,9 +82,15 @@ if (window.location.hostname === "127.0.0.1" || window.location.hostname === "lo
 
   function syncAuthAndSessionFromPage() {
     try {
+      if (!isContextValid()) {
+        publishExtensionStatus(false);
+        stopAllDetection();
+        return;
+      }
       chrome.storage.local.get(
         ["manuallyDisconnected", "jwtAccessToken", "trackingEnabled", "extensionLinked"],
         (stored) => {
+          if (!isContextValid()) { publishExtensionStatus(false); stopAllDetection(); return; }
           const connected = isExtensionLinked(stored);
           trackingActive = connected;
           publishExtensionStatus(connected);
@@ -81,20 +103,24 @@ if (window.location.hostname === "127.0.0.1" || window.location.hostname === "lo
           const token = localStorage.getItem("focusguard_access_token") || localStorage.getItem("fg_token");
           const refresh = localStorage.getItem("focusguard_refresh_token") || localStorage.getItem("fg_refresh");
           if (token) {
-            chrome.runtime.sendMessage({
-              type: "SYNC_AUTH_TOKEN",
-              token: token,
-              refresh: refresh || ""
-            }).catch(() => {});
+            try {
+              chrome.runtime.sendMessage({
+                type: "SYNC_AUTH_TOKEN",
+                token: token,
+                refresh: refresh || ""
+              }).catch(() => {});
+            } catch (e) {}
           }
 
           const activeVal = localStorage.getItem("focusguard_session_active");
           const onBreak = localStorage.getItem("focusguard_on_break") === "true";
-          chrome.runtime.sendMessage({
-            type: "SET_SESSION_STATUS",
-            active: activeVal === "true" && !onBreak,
-            onBreak: onBreak
-          }).catch(() => {});
+          try {
+            chrome.runtime.sendMessage({
+              type: "SET_SESSION_STATUS",
+              active: activeVal === "true" && !onBreak,
+              onBreak: onBreak
+            }).catch(() => {});
+          } catch (e) {}
         }
       );
     } catch (e) {
@@ -108,6 +134,7 @@ if (window.location.hostname === "127.0.0.1" || window.location.hostname === "lo
   setInterval(syncAuthAndSessionFromPage, 2000);
 
   chrome.storage.onChanged.addListener((changes, area) => {
+    if (!isContextValid()) return;
     if (area !== "local") return;
     if (
       changes.jwtAccessToken
@@ -317,6 +344,12 @@ function evaluateFocusShield() {
   const hostname = window.location.hostname;
   if (hostname === "127.0.0.1" || hostname === "localhost") return;
 
+  // Guard: if the extension was reloaded, stop polling silently.
+  if (!isContextValid()) {
+    stopAllDetection();
+    return;
+  }
+
   const snoozeUntil = sessionStorage.getItem("fg_shield_snooze_" + hostname);
   if (snoozeUntil && Date.now() < parseInt(snoozeUntil, 10)) {
     return;
@@ -332,23 +365,28 @@ function evaluateFocusShield() {
     }
   }
 
-  chrome.runtime.sendMessage({
-    type: "CHECK_SHIELD_STATUS",
-    url: window.location.href,
-    title: title,
-    channel: channel
-  }, (res) => {
-    if (chrome.runtime.lastError) return;
-    if (!trackingActive) {
-      removeShieldOverlay();
-      return;
-    }
-    if (res && res.shouldBlock) {
-      injectShieldOverlay(res);
-    } else {
-      removeShieldOverlay();
-    }
-  });
+  try {
+    chrome.runtime.sendMessage({
+      type: "CHECK_SHIELD_STATUS",
+      url: window.location.href,
+      title: title,
+      channel: channel
+    }, (res) => {
+      if (chrome.runtime.lastError) return;
+      if (!trackingActive) {
+        removeShieldOverlay();
+        return;
+      }
+      if (res && res.shouldBlock) {
+        injectShieldOverlay(res);
+      } else {
+        removeShieldOverlay();
+      }
+    });
+  } catch (e) {
+    // Extension context invalidated — stop polling, don't throw.
+    stopAllDetection();
+  }
 }
 
 function getYouTubeMetadata() {
@@ -375,15 +413,19 @@ function getYouTubeMetadata() {
 
 function emitYouTubeNav() {
   if (!trackingActive) return;
+  if (!isContextValid()) { stopAllDetection(); return; }
   const meta = getYouTubeMetadata();
   if (!meta) return;
-  chrome.runtime.sendMessage({
-    type: "YOUTUBE_NAVIGATED",
-    data: meta
-  }).catch(() => {});
+  try {
+    chrome.runtime.sendMessage({
+      type: "YOUTUBE_NAVIGATED",
+      data: meta
+    }).catch(() => {});
+  } catch (e) {}
 }
 
 chrome.runtime.onMessage.addListener((message) => {
+  if (!isContextValid()) return;
   if (message.type === "TRACKING_DISABLED" || message.type === "FORCE_DISCONNECT") {
     stopAllDetection();
     if (window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost") {
@@ -401,6 +443,7 @@ chrome.runtime.onMessage.addListener((message) => {
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
+  if (!isContextValid()) return;
   if (area !== "local") return;
   if (
     changes.jwtAccessToken
