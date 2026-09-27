@@ -769,7 +769,13 @@ function renderDashboard(d) {
     setEl('distMeta', distS > 0 ? `${formatDuration(distS)} total distracted time` : (prodS > 0 ? 'No distracting apps detected' : 'Total distraction time'));
 
     setEl('switchVal', sw > 0 ? sw : '—');
-    setEl('switchMeta', sw === 0 ? 'No switches recorded yet' : `${sw} context change${sw !== 1 ? 's' : ''} today`);
+    const sysSw = d.system_switches || 0;
+    const webSw = d.browser_switches || 0;
+    if (sysSw > 0 || webSw > 0) {
+      setEl('switchMeta', `${sw} total (${sysSw} desktop app${sysSw !== 1 ? 's' : ''} · ${webSw} web tab${webSw !== 1 ? 's' : ''})`);
+    } else {
+      setEl('switchMeta', sw === 0 ? 'No switches recorded yet' : `${sw} context change${sw !== 1 ? 's' : ''} today`);
+    }
 
     if (pScore !== null) {
       setEl('scoreVal', `${pScore}%`);
@@ -917,7 +923,12 @@ async function fetchSwitches() {
 function renderSwitches(bData = {}, sData = {}) {
   // bData from /browsing/switches/today/ already combines browser + system switches
   const total = bData.total_switches !== undefined ? bData.total_switches : ((bData.browser_switches || 0) + (sData.total_switches || 0));
+  const appSwitches = bData.system_switches !== undefined ? bData.system_switches : (sData.total_switches || 0);
+  const tabSwitches = bData.browser_switches !== undefined ? bData.browser_switches : (bData.total_switches || 0);
+
   setEl('swTotalVal', total);
+  setEl('swAppVal', appSwitches);
+  setEl('swTabVal', tabSwitches);
 
   // Fragmentation
   let label = 'None', pct = 0, color = 'var(--color-success)';
