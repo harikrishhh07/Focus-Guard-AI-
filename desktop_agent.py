@@ -704,11 +704,9 @@ def run_agent():
                 if ext_connected != extension_connected_state:
                     extension_connected_state = ext_connected
                     if ext_connected:
-                        log.info('[EXT] Chrome extension Connected — desktop telemetry enabled.')
+                        log.info('[EXT] Chrome extension Connected.')
                     else:
-                        log.info('[EXT] Chrome extension Disconnected — pausing all desktop app detection.')
-                        current_proc = None
-                        session_start = None
+                        log.info('[EXT] Chrome extension Standby.')
 
                 if is_session_active != session_active_state:
                     session_active_state = is_session_active
@@ -716,12 +714,12 @@ def run_agent():
                         log.info('[FOCUS] Focus Session is ACTIVE! Vision scoring and focus metrics enabled.')
                     else:
                         log.info('[FOCUS] Focus Session is IDLE.')
-                        if not on_break_state:
-                            current_proc = None
-                            session_start = None
 
-            # Hard stop: no Chrome extension heartbeat → no desktop detection
-            if extension_connected_state is False:
+            # Pause desktop detection during an active break
+            if on_break_state:
+                if current_proc or session_start:
+                    current_proc = None
+                    session_start = None
                 time.sleep(POLL_SECS)
                 continue
 
